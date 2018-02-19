@@ -46,7 +46,6 @@ exec 2> >(tee -ia /root/make-kamikaze.log >&2)
 
 # this defines the octoprint release tag version#
 OCTORELEASE="1.3.6"
-WD=`pwd`
 VERSION="Umikaze 2.1.2-rc2"
 ROOTPASS="kamikaze"
 DATE=`date`
@@ -133,12 +132,11 @@ install_dependencies(){
 
 install_sgx() {
 	echo "** install SGX **"
-	cd $WD
 	tar xfv GFX_5.01.01.02_es8.x.tar.gz -C /
-	cd /opt/gfxinstall/
+	pushd /opt/gfxinstall/
 	sed -i 's/depmod/#depmod/' sgx-install.sh
 	./sgx-install.sh
-	cd $WD
+	popd
 	cp scripts/sgx-startup.service /lib/systemd/system/
 	systemctl enable sgx-startup.service
 	#depmod -a `uname -r`
@@ -159,11 +157,10 @@ create_user() {
 
 install_redeem() {
 	echo "**install_redeem**"
-	cd /usr/src/
-	if [ ! -d "redeem" ]; then
-		git clone --no-single-branch --depth 1 https://github.com/intelligent-agent/redeem
+	if [ ! -d "/usr/src/redeem" ]; then
+		git clone --no-single-branch --depth 1 https://github.com/intelligent-agent/redeem /usr/src/redeem
 	fi
-	cd redeem
+	pushd /usr/src/redeem
 	git pull
     	git checkout staging
 	make install
@@ -175,7 +172,7 @@ install_redeem() {
 	chown -R octo:octo /etc/redeem/
 	chown -R octo:octo /usr/src/redeem/
 
-	cd $WD
+	popd
 
 	# Install rules
 	cp scripts/spidev.rules /etc/udev/rules.d/
@@ -188,7 +185,7 @@ install_redeem() {
 
 install_octoprint() {
 	echo "** Install OctoPrint **" 
-	cd /home/octo
+	pushd /home/octo
 	if [ ! -d "OctoPrint" ]; then
 		su - octo -c "git clone --no-single-branch --depth 1 https://github.com/foosel/OctoPrint.git"
 		su - octo -c "cd OctoPrint && git checkout tags/$OCTORELEASE"
@@ -199,7 +196,8 @@ install_octoprint() {
 	su - octo -c "pip install https://github.com/Salandora/OctoPrint-FileManager/archive/master.zip --user"
 	su - octo -c "pip install https://github.com/kennethjiang/OctoPrint-Slicer/archive/master.zip --user"
 
-	cd $WD
+	popd
+
 	# Make config file for Octoprint
 	cp OctoPrint/config.yaml /home/octo/.octoprint/
 	chown  -R octo:octo "/home/octo/"
@@ -230,44 +228,40 @@ install_octoprint() {
 
 install_octoprint_redeem() {
 	echo "**install_octoprint_redeem**"
-	cd /usr/src/
-	if [ ! -d "octoprint_redeem" ]; then
-		git clone --no-single-branch --depth 1 https://github.com/eliasbakken/octoprint_redeem
+	if [ ! -d "/usr/src/octoprint_redeem" ]; then
+		git clone --no-single-branch --depth 1 https://github.com/eliasbakken/octoprint_redeem /usr/src/octoprint_redeem
 	fi
-	cd octoprint_redeem
-	python setup.py install
+	( cd /usr/src/octoprint_redeem && python setup.py install )
 }
 
 install_octoprint_toggle() {
 	echo "**install_octoprint_toggle**"
-	cd /usr/src
-	if [ ! -d "octoprint_toggle" ]; then
-		git clone --no-single-branch --depth 1 https://github.com/eliasbakken/octoprint_toggle
+	if [ ! -d "/usr/src/octoprint_toggle" ]; then
+		git clone --no-single-branch --depth 1 https://github.com/eliasbakken/octoprint_toggle /usr/src/octoprint_toggle
 	fi
-	cd octoprint_toggle
-	python setup.py install
+	( cd /usr/src/octoprint_toggle && python setup.py install )
 }
 
 install_overlays() {
 	echo "**install_overlays**"
-	cd /usr/src/
-	if [ ! -d "bb.org-overlays" ]; then
-		git clone --no-single-branch --depth 1 https://github.com/DecisiveMocha/bb.org-overlays
+	if [ ! -d "/usr/src/bb.org-overlays" ]; then
+		git clone --no-single-branch --depth 1 https://github.com/DecisiveMocha/bb.org-overlays /usr/src/bb.org-overlays
 	fi
-	cd bb.org-overlays
+	pushd /usr/src/bb.org-overlays
 	./dtc-overlay.sh # upgrade DTC version!
 	./install.sh
+        popd
 
 	for kernel in `ls /lib/modules`; do update-initramfs -u -k $kernel; done
 }
 
 install_toggle() {
 	echo "** install toggle **"
-	cd /usr/src
-    	if [ ! -d "toggle" ]; then
-		git clone --no-single-branch --depth 1 https://github.com/intelligent-agent/toggle
+    	if [ ! -d "/usr/src/toggle" ]; then
+		git clone --no-single-branch --depth 1 https://github.com/intelligent-agent/toggle /usr/src/toggle
     	fi
-	cd toggle
+
+	pushd /usr/src/toggle
 	python setup.py clean install
 	# Make it writable for updates
 	cp -r configs /etc/toggle
@@ -275,24 +269,27 @@ install_toggle() {
 	cp systemd/toggle.service /lib/systemd/system/
 	systemctl enable toggle
 	chown -R octo:octo /etc/toggle/
+        popd
 }
 
 install_cura() {
 	echo "** install Cura **"
-	cd /usr/src/
+	pushd /usr/src/
 	if [ ! -d "CuraEngine" ]; then
 		wget https://github.com/Ultimaker/CuraEngine/archive/15.04.6.zip
 		unzip 15.04.6.zip
 		rm 15.04.6.zip
 	fi
-	cd CuraEngine-15.04.6/
+	pushd CuraEngine-15.04.6/
 	# Do perimeters first
 	sed -i "s/SETTING(perimeterBeforeInfill, 0);/SETTING(perimeterBeforeInfill, 1);/" src/settings.cpp
 	make
 	cp build/CuraEngine /usr/bin/
 
+	popd
+        popd
+
 	# Copy profiles into Cura.
-	cd $WD
 	mkdir -p /home/octo/.octoprint/slicingProfiles/cura/
 	cp ./Cura/profiles/*.profile /home/octo/.octoprint/slicingProfiles/cura/
 	chown octo:octo /home/octo/.octoprint/slicingProfiles/cura/
@@ -300,22 +297,21 @@ install_cura() {
 
 install_slic3r() {
 	echo "** install Slic3r **"
-	cd /usr/src
-	if [ ! -d "Slic3r" ]; then
-		git clone --no-single-branch --depth 1 https://github.com/alexrj/Slic3r.git
+	if [ ! -d "/usr/src/Slic3r" ]; then
+		git clone --no-single-branch --depth 1 https://github.com/alexrj/Slic3r.git /usr/src/Slic3r
 		sudo apt install -y --no-install-recommends build-essential libgtk2.0-dev libwxgtk3.0-dev libwx-perl libmodule-build-perl git cpanminus libextutils-cppguess-perl libboost-all-dev libxmu-dev liblocal-lib-perl wx-common libopengl-perl libwx-glcanvas-perl libtbb-dev
 		sudo apt-get install -y --no-install-recommends libboost-thread-dev libboost-system-dev libboost-filesystem-dev
 		sudo apt-get install -y --no-install-recommends libxmu-dev freeglut3-dev libwxgtk-media3.0-dev
 	fi
-	cd Slic3r
+	pushd /usr/src/Slic3r
 	LDLOADLIBS=-lstdc++ perl Build.PL
 	chmod +x slic3r.pl
 	ln -s slic3r.pl /usr/local/bin/
+        popd
 }
 
 install_uboot() {
 	echo "** install U-boot**" 
-	cd $WD
 	export DISK=/dev/mmcblk0
 	dd if=./u-boot/MLO of=${DISK} count=1 seek=1 bs=128k
 	dd if=./u-boot/u-boot.img of=${DISK} count=2 seek=1 bs=384k
@@ -331,7 +327,7 @@ other() {
 	sed -i "s/AcceptEnv LANG LC_*/#AcceptEnv LANG LC_*/"  /etc/ssh/sshd_config
 	echo "** Set Root password to $ROOTPASS **"
 	echo "root:$ROOTPASS" | chpasswd
-	chown -R octo:octo $WD
+	chown -R octo:octo `pwd`
 
 	apt-get clean
 	apt-get autoclean
@@ -346,7 +342,6 @@ other() {
 
 install_usbreset() {
 	echo "** Installing usbreset **"
-	cd $WD
 	cc usbreset.c -o usbreset
 	chmod +x usbreset
 	mv usbreset /usr/local/sbin/
@@ -420,9 +415,9 @@ install_dummy_logging() {
 install_mjpgstreamer() {
 	echo "** Install mjpgstreamer **"
 	apt-get install -y --no-install-recommends cmake libjpeg62-dev
-	cd /usr/src/
-	git clone --no-single-branch --depth 1 https://github.com/jacksonliam/mjpg-streamer
-	cd mjpg-streamer/mjpg-streamer-experimental
+	git clone --no-single-branch --depth 1 https://github.com/jacksonliam/mjpg-streamer /usr/src/mjpg-streamer
+	
+        pushd /usr/src/mjpg-streamer/mjpg-streamer-experimental
 	sed -i "s:add_subdirectory(plugins/input_raspicam):#add_subdirectory(plugins/input_raspicam):" CMakeLists.txt
 	make
 	make install
@@ -441,6 +436,8 @@ install_mjpgstreamer() {
 EOL
 	systemctl enable mjpg.service
 	systemctl start mjpg.service
+
+        popd
 }
 
 rename_ssh() {
