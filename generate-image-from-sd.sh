@@ -34,21 +34,21 @@ echo "Partition: $PARTITION"
 
 # This makes it so the image will boot on other BB not just the one it was built on
 echo "Removing UUID references and uncommenting flahser option from /boot/uEnv.txt"
-mkdir /mnt/zero
-mount $PARTITION /mnt/zero
-sed -ie '/^uuid=/d' /mnt/zero/boot/uEnv.txt
-sed -ie 's/#cmdline=init=\/opt\/scripts\/tools\/eMMC\/init-eMMC-flasher-v3.sh$/cmdline=init=\/opt\/scripts\/tools\/eMMC\/init-eMMC-flasher-v3.sh/' /mnt/zero/boot/uEnv.txt
+MOUNTPOINT=$(mktemp -d /tmp/umikaze-sd.XXXXXX)
+mount $PARTITION $MOUNTPOINT
+sed -ie '/^uuid=/d' ${MOUNTPOINT}/boot/uEnv.txt
+sed -ie 's/#cmdline=init=\/opt\/scripts\/tools\/eMMC\/init-eMMC-flasher-v3.sh$/cmdline=init=\/opt\/scripts\/tools\/eMMC\/init-eMMC-flasher-v3.sh/' ${MOUNTPOINT}/boot/uEnv.txt
 echo "Removing WPA wifi access file just in case"
-rm -rf /mnt/zero/root/wpa.conf
+rm -rf ${MOUNTPOINT}/root/wpa.conf
 echo "Clearing bash history"
-rm -rf /mnt/zero/root/.bash_history
-rm -rf /mnt/zero/home/ubuntu/.bash_history
+rm -rf ${MOUNTPOINT}/root/.bash_history
+rm -rf ${MOUNTPOINT}/home/ubuntu/.bash_history
 echo
 
 # Likely not needed but for the sake of making the image smaller we defrag first
 echo "Defragmenting partition."
-e4defrag /mnt/zero > /dev/null
-umount /mnt/zero
+e4defrag ${MOUNTPOINT} > /dev/null
+umount ${MOUNTPOINT}
 echo
 
 # Run file system checks and then shrink the file system as much as possible
@@ -61,11 +61,11 @@ echo
 
 # Zero out the free space remaining on the file system
 echo "Defrag and zero partition free space."
-mount $PARTITION /mnt/zero
-e4defrag /mnt/zero > /dev/null
-dd if=/dev/zero of=/mnt/zero/zeros || true
-rm -rf /mnt/zero/zeros
-umount /mnt/zero
+mount $PARTITION ${MOUNTPOINT}
+e4defrag ${MOUNTPOINT} > /dev/null
+dd if=/dev/zero of=${MOUNTPOINT}/zeros || true
+rm -rf ${MOUNTPOINT}/zeros
+umount ${MOUNTPOINT}
 echo
 
 # Run the file system checks and another series of file system shrinks just in case
@@ -114,14 +114,14 @@ echo
 
 # Run one last defrag and zero of the free space before backing it up
 echo "Final defrag and zeroing partition free space."
-mount $PARTITION /mnt/zero
-kamiversion=$(cat /mnt/zero/etc/dogtag | awk '{printf $2}')
-e4defrag /mnt/zero > /dev/null
+mount $PARTITION ${MOUNTPOINT}
+kamiversion=$(cat ${MOUNTPOINT}/etc/dogtag | awk '{printf $2}')
+e4defrag ${MOUNTPOINT} > /dev/null
 # ignore the failure on this line - it runs until it's out of space
-dd if=/dev/zero of=/mnt/zero/zeros || true
-rm -rf /mnt/zero/zeros
-umount /mnt/zero
-rm -rf /mnt/zero
+dd if=/dev/zero of=${MOUNTPOINT}/zeros || true
+rm -rf ${MOUNTPOINT}/zeros
+umount ${MOUNTPOINT}
+rm -rf ${MOUNTPOINT}
 echo
 
 # Final file system check
