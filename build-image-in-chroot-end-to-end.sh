@@ -53,13 +53,22 @@ cp -r `pwd`/!(*.img*) /mnt/root/usr/src/Umikaze2
 shopt -u extglob
 shopt -u dotglob
 
-chroot /mnt/root /bin/su -c "cd /root && ./prep_ubuntu.sh && ./make-kamikaze-2.1.sh"
+set +e # allow this to fail - we'll check the return code
+chroot /mnt/root /bin/su -c "cd /usr/src/Umikaze2 && ./prep_ubuntu.sh && ./make-kamikaze-2.1.sh"
+
+status=$?
+set -e
 
 umount /mnt/root/proc
 umount /mnt/root/sys
 umount /mnt/root/dev
 umount /mnt/root
 
-./generate-image-from-sd.sh $DEVICE
+if [ $status -eq 0 ]; then
+    echo "Looks like the image was prepared successfully - packing it up"
+    ./generate-image-from-sd.sh $DEVICE
+else
+    echo "image generation seems to have failed - cleaning up"
+fi
 
 losetup -d $DEVICE
