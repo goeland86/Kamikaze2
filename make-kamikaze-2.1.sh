@@ -123,26 +123,7 @@ install_dependencies(){
 	pip install numpy
 	pip install evdev spidev Adafruit_BBIO sympy docutils sh
 
-	cd /usr/src/
-	git clone --branch v5.1.0 --single-branch --depth 1 git://git.ti.com/pru-software-support-package/pru-software-support-package.git
-	cd $WD
-
-	wget https://github.com/beagleboard/am335x_pru_package/archive/master.zip
-	unzip master.zip
-	# install pasm PRU compiler
-	mkdir /usr/include/pruss
-	cd am335x_pru_package-master/
-	cp pru_sw/app_loader/include/prussdrv.h /usr/include/pruss/
-	cp pru_sw/app_loader/include/pruss_intc_mapping.h /usr/include/pruss
-	chmod 555 /usr/include/pruss/*
-	cd pru_sw/app_loader/interface
-	CROSS_COMPILE= make
-	cp ../lib/* /usr/lib
-	ldconfig
-	cd ../../utils/pasm_source/
-	source linuxbuild
-	cp ../pasm /usr/bin/
-	chmod +x /usr/bin/pasm
+	git clone --branch v5.1.0 --single-branch --depth 1 git://git.ti.com/pru-software-support-package/pru-software-support-package.git /usr/src/pru-software-support-package
 
 	echo "GOVERNOR=\"performance\"" > /etc/default/cpufrequtils
 	systemctl stop ondemand
