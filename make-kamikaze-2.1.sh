@@ -46,7 +46,7 @@ exec 2> >(tee -ia /root/make-kamikaze.log >&2)
 
 # this defines the octoprint release tag version#
 OCTORELEASE="1.3.6"
-WD=/usr/src/Umikaze/
+WD=`pwd`
 VERSION="Umikaze 2.1.2-rc2"
 ROOTPASS="kamikaze"
 DATE=`date`

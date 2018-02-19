@@ -5,8 +5,6 @@ set -e
 exec >  >(tee -ia /root/prep_ubuntu.log)
 exec 2> >(tee -ia /root/prep_ubuntu.log >&2)
 
-WD=/usr/src/Umikaze/
-
 KERNEL_VERSION="4.4.116-bone21"
 
 prep_ubuntu() {
@@ -73,7 +71,7 @@ network_manager() {
 	apt-get -y install --no-install-recommends network-manager
 	#ln -s /run/resolvconf/resolv.conf /etc/resolv.conf
 	sed -i 's/^\[main\]/\[main\]\ndhcp=internal/' /etc/NetworkManager/NetworkManager.conf
-	cp $WD/interfaces /etc/network/
+	cp `pwd`/interfaces /etc/network/
 
 }
 
