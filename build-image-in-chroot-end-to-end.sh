@@ -43,9 +43,16 @@ mount -o bind /proc /mnt/root/proc
 mkdir -p /mnt/root/run/resolvconf
 cp /etc/resolv.conf /mnt/root/run/resolvconf/resolv.conf
 
-cp make-kamikaze-2.1.sh /mnt/root/root
-cp prep_ubuntu.sh /mnt/root/root
-git clone https://github.com/goeland86/Umikaze2.git /mnt/root/usr/src/Umikaze2
+# don't git clone here - if someone did a commit since this script started, Unexpected Things will happen
+# instead, do a deep copy so the image has a git repo as well
+mkdir -p /mnt/root/usr/src/Umikaze2
+
+shopt -s dotglob # include hidden files/directories so we get .git
+shopt -s extglob # allow excluding so we can hide the img files
+cp -r `pwd`/!(*.img*) /mnt/root/usr/src/Umikaze2
+shopt -u extglob
+shopt -u dotglob
+
 chroot /mnt/root /bin/su -c "cd /root && ./prep_ubuntu.sh && ./make-kamikaze-2.1.sh"
 
 umount /mnt/root/proc
