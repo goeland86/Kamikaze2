@@ -35,10 +35,17 @@ prep_ubuntu() {
 
 	# 4.4.x-bone series can't deal with the U-Boot overlays
 	sed -i 's\enable_uboot_overlays=1\#enable_uboot_overlays=1\' /boot/uEnv.txt
-	# and it puts root at /dev/mmcblk0p1
+	# and they put root at /dev/mmcblk0p1
 	sed -i 's\cmdline=coherent_pool=1M net.ifnames=0 quiet cape_universal=enable\cmdline=coherent_pool=1M net.ifnames=0 quiet cape_universal=enable root=/dev/mmcblk0p1\' /boot/uEnv.txt
 
 	apt-get -y upgrade
+
+	# first do some magic so iptables-persistent doesn't prompt
+	apt-get -y install debconf-utils
+	echo "iptables-persistent     iptables-persistent/autosave_v4 boolean true" | debconf-set-selections
+	echo "iptables-persistent     iptables-persistent/autosave_v6 boolean true" | debconf-set-selections
+
+	# now install it
 	apt-get -y -q --no-install-recommends --force-yes install unzip iptables iptables-persistent
 	systemctl enable netfilter-persistent
 	sed -i 's/PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh/sshd_config
