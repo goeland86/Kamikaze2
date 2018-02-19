@@ -2,12 +2,18 @@
 set -x
 set -e
 
-BASEIMAGE=https://rcn-ee.com/rootfs/2017-05-21/microsd/bone-ubuntu-16.04.2-console-armhf-2017-05-21-2gb.img.xz
+BASEIMAGE_URL=https://rcn-ee.com/rootfs/2018-02-09/microsd/bone-ubuntu-16.04.3-console-armhf-2018-02-09-2gb.img.xz
 TARGETIMAGE=kamikaze-rootfs.img
+
+BASEIMAGE=`basename $BASEIMAGE_URL`
+
+if [ ! -f $BASEIMAGE ]; then
+    wget $BASEIMAGE_URL
+fi
 
 rm -f $TARGETIMAGE
 
-curl $BASEIMAGE | xz -T 0 -d > $TARGETIMAGE
+xz -c -d $BASEIMAGE >> $TARGETIMAGE
 
 truncate -s 4G $TARGETIMAGE
 DEVICE=`losetup -P -f --show $TARGETIMAGE`
