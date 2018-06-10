@@ -1,8 +1,7 @@
 # This specifies the appropriate version of Umikaze/Kamikaze Build
-UMIKAZE_REPOSITORY="https://github.com/intelligent-agent/Umikaze.git"
-UMIKAZE_BRANCH="master"
+UMIKAZE_REPOSITORY="https://github.com/Wackerbarth/Umikaze.git"
+UMIKAZE_BRANCH="trial"
 UMIKAZE_HOME="/usr/src/Umikaze"
-
 # This specifies the Kamikaze Variables
-VERSION="Umikaze 2.2.0-rc0"
+VERSION="Umikaze 2.2.0-rc1"
 ROOTPASS="kamikaze"
