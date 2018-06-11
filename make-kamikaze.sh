@@ -54,5 +54,6 @@ install_smbd
 install_dummy_logging
 install_videostreamer
 rebrand_ssh
+perform_cleanup
 
 echo "Now reboot!"

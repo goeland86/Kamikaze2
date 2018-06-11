@@ -1,0 +1,15 @@
+#!/bin/bash
+# SPDX-License-Identifier: GPL-2.0
+
+for f in `ls ${VERSIONING}/*`
+  do
+    source $f
+  done
+
+userdel ubuntu
+chage -d 0 root
+rm -rf /var/cache/*
+rm -f GFX_5.01.01.02_es8.x.tar.gz
+rm -rf /usr/src/pru-software-support-package/examples /usr/src/pru-software-support-package/labs
+rm -rf /opt/gfxsdkdemos/ /opt/source/
+sed -i 's@|/dev/xconsole@@' /etc/rsyslog.d/50-default.conf
