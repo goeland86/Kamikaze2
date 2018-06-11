@@ -1,0 +1,4 @@
+# This specifies the appropriate version of Toggle
+SLIC3R_REPOSITORY="https://github.com/alexrj/Slic3r.git"
+SLIC3R_BRANCH="master"
+SLIC3R_HOME="/usr/src/Slic3r"
