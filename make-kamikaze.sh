@@ -43,6 +43,7 @@ install_toggle
 # install_cura
 # install_slic3r
 # install_u-boot
+install_smbd
 install_videostreamer
 rebrand_ssh
 
