@@ -1,0 +1,18 @@
+#!/bin/bash
+# SPDX-License-Identifier: GPL-2.0
+
+for f in `ls ${VERSIONING}/*`
+  do
+    source $f
+  done
+
+echo "** Create user 'octo' **"
+default_groups="admin,adm,dialout,i2c,kmem,spi,cdrom,floppy,audio,dip,video,netdev,plugdev,users,systemd-journal,tisdk,weston-launch,xenomai"
+mkdir -p ${OCTOPRINT_HOME}/.octoprint
+if ! id octo >/dev/null 2>&1; then
+  useradd -G "${default_groups}" -s /bin/bash -m -p octo -c "OctoPrint" octo
+fi
+chown -R octo:octo ${OCTOPRINT_HOME}
+chown -R octo:octo /usr/local/lib/python2.7/
+chown -R octo:octo /usr/local/bin
+chmod 755 -R /usr/local/lib/python2.7/

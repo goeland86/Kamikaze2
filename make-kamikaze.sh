@@ -34,6 +34,7 @@ echo "**Making ${VERSION}**"
 export LC_ALL=C
 
 # install_sgx
+create_user
 install_redeem
 install_octoprint
 install_octoprint_redeem
