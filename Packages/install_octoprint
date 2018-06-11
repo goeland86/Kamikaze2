@@ -1,0 +1,64 @@
+#!/bin/bash
+# SPDX-License-Identifier: GPL-2.0
+
+for f in `ls ${VERSIONING}/*`
+  do
+    source $f
+  done
+
+echo "** Install OctoPrint **"
+if [ ! -d $OCTOPRINT_HOME ]; then
+  mkdir -p $OCTOPRINT_HOME
+  git clone ${OCTOPRINT_REPOSITORY} --no-single-branch --depth 1 $OCTOPRINT_HOME/Octoprint
+fi
+
+# Make config file for Octoprint
+cp OctoPrint/config.yaml ${OCTOPRINT_HOME}/.octoprint/
+sed -i "s/KAMIKAZE/$VERSION/" ${OCTOPRINT_HOME}/.octoprint/config.yaml
+chown  -R octo:octo "${OCTOPRINT_HOME}/"
+
+chown -R octo:octo /usr/local/lib/python2.7/dist-packages/
+chown -R octo:octo /usr/local/bin/
+sudo - octo <<EOF
+  cd ${OCTOPRINT_HOME}/Octoprint
+  git pull
+  git checkout tags/${OCTOPRINT_RELEASE}
+  python setup.py clean install
+  pip install https://github.com/Salandora/OctoPrint-FileManager/archive/master.zip --user
+  pip install https://github.com/kennethjiang/OctoPrint-Slicer/archive/master.zip --user
+EOF
+
+# Fix permissions for STL upload folder
+mkdir -p /usr/share/models
+chown octo:octo /usr/share/models
+chmod 777 /usr/share/models
+
+# Grant octo restart rights
+echo "%octo ALL=NOPASSWD: /bin/systemctl restart redeem.service" >> /etc/sudoers
+echo "%octo ALL=NOPASSWD: /bin/systemctl restart toggle.service" >> /etc/sudoers
+echo "%octo ALL=NOPASSWD: /bin/systemctl restart mjpg.service" >> /etc/sudoers
+echo "%octo ALL=NOPASSWD: /bin/systemctl restart octoprint.service" >> /etc/sudoers
+echo "%octo ALL=NOPASSWD: /sbin/reboot" >> /etc/sudoers
+echo "%octo ALL=NOPASSWD: /sbin/shutdown -h now" >> /etc/sudoers
+echo "%octo ALL=NOPASSWD: /sbin/poweroff" >> /etc/sudoers
+echo "%octo ALL=NOPASSWD: /usr/bin/make -C /usr/local/src/redeem install" >> /etc/sudoers
+echo "%octo ALL=NOPASSWD: /usr/bin/make -C /usr/src/toggle install" >> /etc/sudoers
+
+# Install systemd script
+cat > /lib/systemd/system/octoprint.service <<EOF
+[Unit]
+Description=OctoPrint
+
+[Service]
+Type=simple
+ExecStart=/usr/local/bin/octoprint serve
+Restart=always
+RestartSec=60
+User=octo
+
+[Install]
+WantedBy=multi-user.target
+EOF
+
+systemctl enable octoprint
+systemctl start octoprint
