@@ -1,0 +1,17 @@
+#!/bin/bash
+# SPDX-License-Identifier: GPL-2.0
+
+for f in `ls ${VERSIONING}/*`
+  do
+    source $f
+  done
+
+echo "** Update SSH message **"
+cat > /etc/issue.net << EOL
+$VERSION
+rcn-ee.net console Ubuntu Image ${BASEIMAGE_DATE}
+
+Check that nothing is printing before any CPU/disk intensive operations!
+EOL
+rm /etc/issue
+ln -s /etc/issue.net /etc/issue

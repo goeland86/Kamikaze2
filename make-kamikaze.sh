@@ -40,5 +40,6 @@ install_toggle
 # install_slic3r
 # install_u-boot
 install_videostreamer
+rebrand_ssh
 
 echo "Now reboot!"
