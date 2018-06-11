@@ -1,0 +1,4 @@
+# This specifies the appropriate version of U-Boot
+# UBOOT_REPOSITORY="git://git.denx.de/u-boot.git"
+# UBOOT_BRANCH="master"
+UBOOT_HOME="${VERSIONING}/../u-boot"

@@ -1,0 +1,15 @@
+#!/bin/bash
+
+# Get the versioning information from the entries in version.d/
+for f in `ls ${VERSIONING}/*`
+  do
+    source $f
+  done
+
+echo "** install U-boot**"
+cd ${UBOOT_HOME}
+export DISK=/dev/mmcblk0
+dd if=MLO of=${DISK} count=1 seek=1 bs=128k
+dd if=u-boot.img of=${DISK} count=2 seek=1 bs=384k
+cp MLO /boot/uboot/
+cp u-boot.img /boot/uboot/
