@@ -35,6 +35,7 @@ echo "**Making ${VERSION}**"
 export LC_ALL=C
 export PATH=`pwd`/Packages:$PATH
 
+setup_port_forwarding
 install_dependencies
 # install_sgx
 create_user
