@@ -1,0 +1,27 @@
+#!/bin/bash
+# SPDX-License-Identifier: GPL-2.0
+
+for f in `ls ${VERSIONING}/*`
+  do
+    source $f
+  done
+
+echo "** install Cura **"
+pushd /usr/src/
+  if [ ! -d "${CURA_HOME}" ]; then
+    wget ${CURA_REPOSITORY}/archive/${CURA_TAG}.zip
+    unzip ${CURA_TAG}.zip
+    rm ${CURA_TAG}.zip
+  fi
+  pushd ${CURA_HOME}/
+    # Do perimeters first
+    sed -i "s/SETTING(perimeterBeforeInfill, 0);/SETTING(perimeterBeforeInfill, 1);/" src/settings.cpp
+    make
+    cp build/CuraEngine /usr/local/bin/
+  popd
+popd
+
+# Copy profiles into Cura.
+mkdir -p ${OCTOPRINT_HOME}/.octoprint/slicingProfiles/cura/
+cp ./Cura/profiles/*.profile ${OCTOPRINT_HOME}/.octoprint/slicingProfiles/cura/
+chown octo:octo ${OCTOPRINT_HOME}/.octoprint/slicingProfiles/cura/
