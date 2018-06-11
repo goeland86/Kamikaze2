@@ -1,0 +1,4 @@
+# This specifies the appropriate version of Toggle
+OVERLAYS_REPOSITORY="https://github.com/ThatWileyGuy/bb.org-overlays"
+OVERLAYS_BRANCH="master"
+OVERLAYS_HOME="/usr/src/bb.org-overlays"

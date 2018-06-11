@@ -1,0 +1,18 @@
+#!/bin/bash
+# SPDX-License-Identifier: GPL-2.0
+
+for f in `ls ${VERSIONING}/*`
+  do
+    source $f
+  done
+
+echo "**install_overlays**"
+if [ ! -d "${OVERLAYS_HOME}" ]; then
+  git clone --no-single-branch --depth 1 ${OVERLAYS_REPOSITORY} ${OVERLAYS_HOME}
+fi
+cd ${OVERLAYS_HOME}
+git pull
+git checkout ${OVERLAYS_BRANCH}
+./dtc-overlay.sh # upgrade DTC version!
+./install.sh
+for kernel in `ls /lib/modules`; do update-initramfs -u -k $kernel; done
