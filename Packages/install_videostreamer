@@ -1,0 +1,36 @@
+#!/bin/bash
+# SPDX-License-Identifier: GPL-2.0
+
+for f in `ls ${VERSIONING}/*`
+  do
+    source $f
+  done
+
+echo "** Install video streamer **"
+apt-get install -y --no-install-recommends cmake libjpeg62-dev
+
+if [ ! -d "${VIDEOSTREAMER_HOME}" ]; then
+  git clone --no-single-branch --depth 1 ${VIDEOSTREAMER_REPOSITORY} ${VIDEOSTREAMER_HOME}
+fi
+cd ${VIDEOSTREAMER_HOME}
+git pull
+git checkout ${VIDEOSTREAMER_BRANCH}
+cd mjpg-streamer-experimental
+sed -i "s:add_subdirectory(plugins/input_raspicam):#add_subdirectory(plugins/input_raspicam):" CMakeLists.txt
+make
+make install
+echo "KERNEL==\"video0\", TAG+=\"systemd\"" > /etc/udev/rules.d/50-video.rules
+cat > /lib/systemd/system/mjpg.service << EOL
+[Unit]
+Description=Mjpg streamer
+Wants=dev-video0.device
+After=dev-video0.device
+
+[Service]
+ExecStart=/usr/local/bin/mjpg_streamer -i "/usr/local/lib/mjpg-streamer/input_uvc.so" -o "/usr/local/lib/mjpg-streamer/output_http.so"
+
+[Install]
+WantedBy=basic.target
+EOL
+systemctl enable mjpg.service
+systemctl start mjpg.service

@@ -39,5 +39,6 @@ install_toggle
 # install_cura
 # install_slic3r
 # install_u-boot
+install_videostreamer
 
 echo "Now reboot!"
