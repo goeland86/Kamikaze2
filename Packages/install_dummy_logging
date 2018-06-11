@@ -1,0 +1,16 @@
+#!/bin/bash
+# SPDX-License-Identifier: GPL-2.0
+
+for f in `ls ${VERSIONING}/*`
+  do
+    source $f
+  done
+
+echo "** Install dummy logging **"
+apt-get install -y --no-install-recommends rungetty
+useradd -m dummy
+usermod -a -G systemd-journal dummy
+echo "clear" >> /home/dummy/.profile
+echo "journalctl -f" >> /home/dummy/.profile
+text="ExecStart=-/sbin/getty -a dummy 115200 %I"
+sed -i "/.*ExecStart*./ c $text" /etc/systemd/system/getty.target.wants/getty@tty1.service

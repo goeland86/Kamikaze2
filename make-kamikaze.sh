@@ -46,6 +46,7 @@ install_toggle
 # install_u-boot
 install_usbreset
 install_smbd
+install_dummy_logging
 install_videostreamer
 rebrand_ssh
 
