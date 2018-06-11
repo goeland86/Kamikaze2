@@ -1,0 +1,22 @@
+#!/bin/bash
+# SPDX-License-Identifier: GPL-2.0
+
+for f in `ls ${VERSIONING}/*`
+  do
+    source $f
+  done
+
+echo "** install toggle **"
+if [ ! -d "${TOGGLE_HOME}" ]; then
+  git clone --no-single-branch --depth 1 ${TOGGLE_REPOSITORY} ${TOGGLE_HOME}
+fi
+cd ${TOGGLE_HOME}
+git pull
+git checkout ${TOGGLE_BRANCH}
+python setup.py clean install
+# Make it writable for updates
+cp -r configs /etc/toggle
+chown -R octo:octo ${TOGGLE_HOME}/
+cp systemd/toggle.service /lib/systemd/system/
+systemctl enable toggle
+chown -R octo:octo /etc/toggle/
