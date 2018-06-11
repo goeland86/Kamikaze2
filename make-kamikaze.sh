@@ -55,5 +55,6 @@ install_dummy_logging
 install_videostreamer
 rebrand_ssh
 perform_cleanup
+prepare_flasher
 
 echo "Now reboot!"
