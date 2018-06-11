@@ -2,7 +2,7 @@
 set -x
 set -e
 
-for f in `ls version.d/*`
+for f in `ls Packages/version.d/*`
   do
     source $f
   done
