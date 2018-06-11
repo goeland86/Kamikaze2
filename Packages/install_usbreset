@@ -1,0 +1,12 @@
+#!/bin/bash
+# SPDX-License-Identifier: GPL-2.0
+
+for f in `ls ${VERSIONING}/*`
+  do
+    source $f
+  done
+
+echo "** Installing usbreset **"
+cc usbreset.c -o usbreset
+chmod +x usbreset
+mv usbreset /usr/local/sbin/
