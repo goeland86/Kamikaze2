@@ -1,0 +1,4 @@
+# This specifies the appropriate version of octoprint_redeem
+OCTOPRINT_REDEEM_REPOSITORY="https://github.com/eliasbakken/octoprint_redeem"
+OCTOPRINT_REDEEM_BRANCH="master"
+OCTOPRINT_REDEEM_HOME="/usr/src/octoprint_redeem"
