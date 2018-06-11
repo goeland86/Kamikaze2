@@ -1,0 +1,18 @@
+#!/bin/bash
+# SPDX-License-Identifier: GPL-2.0
+
+for f in `ls ${VERSIONING}/*`
+  do
+    source $f
+  done
+
+echo "** install SGX **"
+tar xfv GFX_5.01.01.02_es8.x.tar.gz -C /
+pushd /opt/gfxinstall/
+  sed -i 's/depmod/#depmod/' sgx-install.sh
+  ./sgx-install.sh
+popd
+cp scripts/sgx-startup.service /lib/systemd/system/
+systemctl enable sgx-startup.service
+# depmod -a `uname -r`
+# ln -s /usr/lib/libEGL.so /usr/lib/libEGL.so.1
