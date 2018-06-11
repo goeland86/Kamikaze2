@@ -1,2 +1,0 @@
-KERNEL=="spidev2.1", TAG+="systemd", SYMLINK+="steppers"
-KERNEL=="spidev1.1", TAG+="systemd", SYMLINK+="steppers", SYMLINK+="spidev2.1"
