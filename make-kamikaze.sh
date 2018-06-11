@@ -25,13 +25,15 @@ exec 2> >(tee -ia /root/make-kamikaze.log >&2)
 # Update to Clutter 1.26.0+dsfg-1
 
 # Get the versioning information from the entries in version.d/
-for f in `ls version.d/*`
+export VERSIONING=`pwd`/Packages/version.d
+for f in `ls ${VERSIONING}/*`
   do
     source $f
   done
 
 echo "**Making ${VERSION}**"
 export LC_ALL=C
+export PATH=`pwd`/Packages:$PATH
 
 install_dependencies
 # install_sgx
