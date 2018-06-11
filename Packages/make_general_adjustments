@@ -1,0 +1,27 @@
+#!/bin/bash
+# SPDX-License-Identifier: GPL-2.0
+
+for f in `ls ${VERSIONING}/*`
+  do
+    source $f
+  done
+
+echo "** Performing general actions **"
+sed -i "s/cape_universal=enable/consoleblank=0 fbcon=rotate:1 omap_wdt.nowayout=0/" /boot/uEnv.txt
+sed -i "s/arm/kamikaze/" /etc/hostname
+sed -i "s/arm/kamikaze/g" /etc/hosts
+sed -i "s/AcceptEnv LANG LC_*/#AcceptEnv LANG LC_*/"  /etc/ssh/sshd_config
+echo "** Set Root password to $ROOTPASS **"
+echo "root:$ROOTPASS" | chpasswd
+chown -R octo:octo `pwd`
+
+apt-get clean
+apt-get autoclean
+rm -rf /var/cache/doc*
+apt-get -y autoremove
+DATE=`date`
+echo "$VERSION $DATE" > /etc/dogtag
+echo "KERNEL==\"uinput\", GROUP=\"wheel\", MODE:=\"0660\"" > /etc/udev/rules.d/80-lcd-screen.rules
+echo "SYSFS{idVendor}==\"0eef\", SYSFS{idProduct}==\"0001\", KERNEL==\"event*\",SYMLINK+=\"input/touchscreen_eGalaxy3\"" >> /etc/udev/rules.d/80-lcd-screen.rules
+date=$(date +"%d-%m-%Y")
+echo "$VERSION $date" > /etc/kamikaze-release
