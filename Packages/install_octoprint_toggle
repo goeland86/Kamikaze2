@@ -1,0 +1,16 @@
+#!/bin/bash
+# SPDX-License-Identifier: GPL-2.0
+
+for f in `ls ${VERSIONING}/*`
+  do
+    source $f
+  done
+
+echo "**install_octoprint_toggle**"
+if [ ! -d "${OCTOPRINT_TOGGLE_HOME}" ]; then
+  git clone --no-single-branch --depth 1 ${OCTOPRINT_TOGGLE_REPOSITORY} ${OCTOPRINT_TOGGLE_HOME}
+fi
+cd ${OCTOPRINT_TOGGLE_HOME}
+git pull
+git checkout ${OCTOPRINT_TOGGLE_BRANCH}
+python setup.py clean install

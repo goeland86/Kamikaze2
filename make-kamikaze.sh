@@ -35,6 +35,7 @@ export LC_ALL=C
 
 # install_sgx
 install_octoprint
+install_octoprint_toggle
 install_toggle
 # install_cura
 # install_slic3r
