@@ -33,6 +33,7 @@ for f in `ls version.d/*`
 echo "**Making ${VERSION}**"
 export LC_ALL=C
 
+install_dependencies
 # install_sgx
 create_user
 install_redeem

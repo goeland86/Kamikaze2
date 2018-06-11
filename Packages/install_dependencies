@@ -1,0 +1,61 @@
+#!/bin/bash
+# SPDX-License-Identifier: GPL-2.0
+
+for f in `ls ${VERSIONING}/*`
+  do
+    source $f
+  done
+
+echo "** Install dependencies **"
+apt-get update
+echo "APT::Install-Recommends \"false\";" > /etc/apt/apt.conf.d/99local
+echo "APT::Install-Suggests \"false\";" >> /etc/apt/apt.conf.d/99local
+apt-get install --no-install-recommends -y \
+python-pip \
+python-setuptools \
+python-dev \
+swig \
+socat \
+libyaml-dev \
+libcogl20 \
+libclutter-1.0-0 \
+libclutter-imcontext-0.1-0 \
+libcluttergesture-0.0.2-0 \
+python-scipy \
+python-smbus \
+python-gi-cairo \
+python-numpy \
+libavahi-compat-libdnssd1 \
+libclutter-1.0-common \
+libclutter-imcontext-0.1-bin \
+libcogl-common \
+libmx-bin \
+libegl1-sgx-omap3 \
+libgles2-sgx-omap3 \
+gir1.2-mash-0.3-0 \
+gir1.2-mx-2.0 \
+screen \
+tmux \
+htop \
+unzip \
+cpufrequtils \
+f2fs-tools \
+ti-pru-cgt-installer \
+ffmpeg
+
+apt-get -y autoremove
+apt-get -y purge linux-image-4.9.* linux-image-4.4.*
+apt-mark hold linux-image-`cat /boot/uEnv.txt | awk -F '=' '/uname_r/ {print $2}'`
+
+easy_install --upgrade pip
+pip install numpy
+pip install evdev spidev Adafruit_BBIO Adafruit-GPIO sympy docutils sh
+
+if [ ! -d "/usr/src/pru-software-support-package" ]; then
+  git clone --branch v5.1.0 --single-branch --depth 1 git://git.ti.com/pru-software-support-package/pru-software-support-package.git /usr/src/pru-software-support-package
+fi
+
+echo "GOVERNOR=\"performance\"" > /etc/default/cpufrequtils
+systemctl stop ondemand
+systemctl disable ondemand
+apt-get autoremove -y
