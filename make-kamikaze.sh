@@ -67,6 +67,8 @@ install_dependencies(){
   echo "APT::Install-Recommends \"false\";" > /etc/apt/apt.conf.d/99local
   echo "APT::Install-Suggests \"false\";" >> /etc/apt/apt.conf.d/99local
   apt-get install --no-install-recommends -y \
+  ./packages/sgx-libgbm.deb \
+  ./packages/sgx-ti335x-userspace-1.14.3699939_1.1.deb \
   python-pip \
   python-setuptools \
   python-dev \
@@ -86,8 +88,6 @@ install_dependencies(){
   libclutter-imcontext-0.1-bin \
   libcogl-common \
   libmx-bin \
-  libegl1-sgx-omap3 \
-  libgles2-sgx-omap3 \
   gir1.2-mash-0.3-0 \
   gir1.2-mx-2.0 \
   screen \
@@ -119,15 +119,12 @@ install_dependencies(){
 
 install_sgx() {
   echo "** install SGX **"
-  tar xfv GFX_5.01.01.02_es8.x.tar.gz -C /
-  pushd /opt/gfxinstall/
-    sed -i 's/depmod/#depmod/' sgx-install.sh
-    ./sgx-install.sh
-  popd
-  cp scripts/sgx-startup.service /lib/systemd/system/
   systemctl enable sgx-startup.service
-# depmod -a `uname -r`
-# ln -s /usr/lib/libEGL.so /usr/lib/libEGL.so.1
+  cat > /etc/powervr.ini <<EOF
+[default]
+WindowSystem=libpvrDRMWSEGL.so
+DefaultPixelFormat=RGB565
+EOF
 }
 
 create_user() {
@@ -381,14 +378,14 @@ cleanup() {
 
 prepare_flasher() {
   cp functions.sh init-eMMC-flasher-v3.sh /opt/scripts/tools/eMMC/
-  sed -i 's/#cmdline=/cmdline=/' /boot/uEnv.txt
+  sed -i 's/#cmdline=init/cmdline=init/' /boot/uEnv.txt
   sed -i 's/#enable_/enable_/' /boot/uEnv.txt
 }
 
 construct_distribution() {
   port_forwarding
   install_dependencies
-# install_sgx
+  install_sgx
   create_user
 
   source Redeem/build_script_functions.sh

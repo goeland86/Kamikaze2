@@ -1,6 +1,7 @@
 #!/bin/bash
 
 add_custom_account() {
+  return
 }
 
 perform_minimal_reconfiguration() {
