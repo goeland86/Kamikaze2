@@ -15,3 +15,7 @@ Check that nothing is printing before any CPU/disk intensive operations!
 EOL
 rm /etc/issue
 ln -s /etc/issue.net /etc/issue
+
+# Enable ZeroConf for ssh
+cp /usr/share/doc/avahi-daemon/examples/ssh.service /etc/avahi/services
+cp /usr/share/doc/avahi-daemon/examples/sftp-ssh.service  /etc/avahi/services
