@@ -1,6 +1,8 @@
 #!/bin/bash
 
 add_custom_account() {
+  # To avoid an empty function because users may not have made any customizations
+  return
 }
 
 perform_minimal_reconfiguration() {
