@@ -1,3 +1,3 @@
 # This specifies the base Ubuntu system
-BASEIMAGE_DATE="2018-02-09"
-BASEIMAGE_URL=https://rcn-ee.com/rootfs/${BASEIMAGE_DATE}/flasher/BBB-eMMC-flasher-ubuntu-16.04.3-console-armhf-${BASEIMAGE_DATE}-2gb.img.xz
+BASEIMAGE_DATE="2018-03-09"
+BASEIMAGE_URL=https://rcn-ee.com/rootfs/${BASEIMAGE_DATE}/flasher/BBB-eMMC-flasher-ubuntu-16.04.4-console-armhf-${BASEIMAGE_DATE}-2gb.img.xz
