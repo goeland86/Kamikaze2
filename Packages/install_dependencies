@@ -30,8 +30,6 @@ libclutter-1.0-common \
 libclutter-imcontext-0.1-bin \
 libcogl-common \
 libmx-bin \
-libegl1-sgx-omap3 \
-libgles2-sgx-omap3 \
 gir1.2-mash-0.3-0 \
 gir1.2-mx-2.0 \
 screen \

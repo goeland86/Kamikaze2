@@ -7,12 +7,13 @@ for f in `ls ${VERSIONING}/*`
   done
 
 echo "** install SGX **"
-tar xfv GFX_5.01.01.02_es8.x.tar.gz -C /
-pushd /opt/gfxinstall/
-  sed -i 's/depmod/#depmod/' sgx-install.sh
-  ./sgx-install.sh
-popd
-cp scripts/sgx-startup.service /lib/systemd/system/
+apt-get install --no-install-recommends -y \
+ SGX/sgx-libgbm.deb \
+ SGX/sgx-ti335x-userspace-1.14.3699939_1.1.deb
+
+cat > /etc/powervr.ini <<EOF
+[default]
+WindowSystem=libpvrDRMWSEGL.so
+DefaultPixelFormat=RGB565
+EOF
 systemctl enable sgx-startup.service
-# depmod -a `uname -r`
-# ln -s /usr/lib/libEGL.so /usr/lib/libEGL.so.1
