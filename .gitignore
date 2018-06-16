@@ -1,2 +1,4 @@
+# Allow individual customization that is not in the repository
+customize.sh
 *.img
 *.img.*

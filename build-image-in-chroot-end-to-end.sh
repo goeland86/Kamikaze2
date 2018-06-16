@@ -7,7 +7,9 @@ for f in `ls Packages/version.d/*`
     source $f
   done
 
-source customize.sh
+if [ -f "customize.sh" ] ; then
+  source customize.sh
+fi
 
 TARGETIMAGE=kamikaze-rootfs.img
 MOUNTPOINT=$(mktemp -d /tmp/umikaze-root.XXXXXX)
@@ -57,8 +59,10 @@ cp -r `pwd`/!(*.img*) ${MOUNTPOINT}${UMIKAZE_HOME}
 shopt -u extglob
 shopt -u dotglob
 
-add_custom_account
-perform_minimal_reconfiguration
+if [ -f "customize.sh" ]; then
+  add_custom_account
+  perform_minimal_reconfiguration
+fi
 
 set +e # allow this to fail - we'll check the return code
 chroot ${MOUNTPOINT} /bin/su -c "cd ${UMIKAZE_HOME} && ./prep_ubuntu.sh && ./make-kamikaze.sh"
