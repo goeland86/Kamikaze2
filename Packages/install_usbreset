@@ -5,8 +5,10 @@ for f in `ls ${VERSIONING}/*`
   do
     source $f
   done
+cd Packages
 
 echo "** Installing usbreset **"
+cd USB
 cc usbreset.c -o usbreset
 chmod +x usbreset
 mv usbreset /usr/local/sbin/

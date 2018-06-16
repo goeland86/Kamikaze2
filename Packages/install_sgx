@@ -5,11 +5,13 @@ for f in `ls ${VERSIONING}/*`
   do
     source $f
   done
+cd Packages
 
 echo "** install SGX **"
+cd SGX
 apt-get install --no-install-recommends -y \
- SGX/sgx-libgbm.deb \
- SGX/sgx-ti335x-userspace-1.14.3699939_1.1.deb
+  ./sgx-libgbm.deb \
+  ./sgx-ti335x-userspace-1.14.3699939_1.1.deb
 
 cat > /etc/powervr.ini <<EOF
 [default]
