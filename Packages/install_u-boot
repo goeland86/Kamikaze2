@@ -1,10 +1,13 @@
 #!/bin/bash
+# SPDX-License-Identifier: GPL-2.0
 
-# Get the versioning information from the entries in version.d/
+set -e
+set -x
 for f in `ls ${VERSIONING}/*`
   do
     source $f
   done
+cd Packages
 
 echo "** install U-boot**"
 cd ${UBOOT_HOME}

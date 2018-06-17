@@ -1,10 +1,13 @@
 #!/bin/bash
 # SPDX-License-Identifier: GPL-2.0
 
+set -e
+set -x
 for f in `ls ${VERSIONING}/*`
   do
     source $f
   done
+cd Packages
 
 echo "** Install video streamer **"
 apt-get install -y --no-install-recommends cmake libjpeg62-dev

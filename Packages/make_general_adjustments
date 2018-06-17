@@ -1,10 +1,13 @@
 #!/bin/bash
 # SPDX-License-Identifier: GPL-2.0
 
+set -e
+set -x
 for f in `ls ${VERSIONING}/*`
   do
     source $f
   done
+cd Packages
 
 echo "** Performing general actions **"
 sed -i "s/cape_universal=enable/consoleblank=0 fbcon=rotate:1 omap_wdt.nowayout=0/" /boot/uEnv.txt

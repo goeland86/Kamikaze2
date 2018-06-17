@@ -1,6 +1,8 @@
 #!/bin/bash
 # SPDX-License-Identifier: GPL-2.0
 
+set -e
+set -x
 for f in `ls ${VERSIONING}/*`
   do
     source $f

@@ -1,10 +1,13 @@
 #!/bin/bash
 # SPDX-License-Identifier: GPL-2.0
 
+set -e
+set -x
 for f in `ls ${VERSIONING}/*`
   do
     source $f
   done
+cd Packages
 
 echo "** Create user 'octo' **"
 default_groups="admin,adm,dialout,i2c,kmem,spi,cdrom,floppy,audio,dip,video,netdev,plugdev,users,systemd-journal,tisdk,weston-launch,xenomai"
