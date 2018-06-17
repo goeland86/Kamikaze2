@@ -1,6 +1,6 @@
 #!/bin/bash -e
 #
-# This script is alibrary of common functions used by the other scripts in the current directory
+# This script is a library of common functions used by the other scripts in the current directory
 # It is meant to be sourced by the other scripts, NOT executed.
 # Source it like this:
 # source $(dirname "$0")/functions.sh
@@ -215,24 +215,24 @@ backup_umikaze_settings() {
 		cp -Lf $INPUT/etc/hostname /etc/hostname
 		# backup the content of hosts
 		cat $INPUT/etc/hosts >> /etc/hosts
-		
+
 		if [ -d $INPUT/etc/avahi ]; then
 			cp -Lrf $INPUT/etc/avahi /etc/
 		fi
-		
+
 		if [ -d $INPUT/root/.ssh ]; then
 			cp -Lrf $INPUT/root/.ssh /root/
 		fi
-		
+
 		# copy the network config over from 2.1.0+
-		if [ -d $INPUT/etc/NetworkManager]; then
+		if [ -d $INPUT/etc/NetworkManager ]; then
 			echo "Network manager config..."
 			cp -Lrf $INPUT/etc/NetworkManager /etc/
 			echo "done"
 		fi
 		if [ -d $INPUT/home/octo/.octoprint ]; then
 			echo "updating octoprint's name with the new Umikaze release name"
-			# use sed to modify the octoprint config.yaml to register the new Umikaze version		
+			# use sed to modify the octoprint config.yaml to register the new Umikaze version
 			VERSION=`cat /etc/kamikaze-release | awk -F ' ' '{print $1 $2}'`
 			sed -i "s/name: .*kaze.*/name: $VERSION/" $INPUT/home/octo/.octoprint/config.yaml
 			echo "done"
@@ -270,19 +270,19 @@ backup_umikaze_settings() {
 			cp -d $INPUT/etc/redeem/printer.cfg /etc/redeem/printer.cfg
 			echo "done"
 		fi
-		
+
 		chown -R octo:octo /etc/redeem/
-		
-		if [ -d $INPUT/etc/toggle/]; then
+
+		if [ -d $INPUT/etc/toggle/ ]; then
 			echo "Backup of Toggle's configuration"
 			# copy the Toggle local.cfg file over
 			cp -rfL $INPUT/etc/toggle/ /etc/
 			echo "done"
 		fi
-		
+
 		chown -R octo:octo /etc/toggle/
-		
-		if [ -d $INPUT/usr/share/models]; then
+
+		if [ -d $INPUT/usr/share/models ]; then
 			echo "Backup of user's GCode files"
 			# copy the gcodes in /usr/share/models
 			cp -Lrf $INPUT/usr/share/models/* /usr/share/models
@@ -1499,7 +1499,7 @@ prepare_drive() {
     _copy_rootfs
     _teardown_future_rootfs
   fi
-  
+
   teardown_environment
   end_script
 }
