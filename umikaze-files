@@ -1,0 +1,10 @@
+/etc/hostname
+/etc/hosts
+/etc/avahi
+/root/.ssh
+/etc/NetworkManager
+/home/octo/.octoprint
+/etc/redeem/local.cfg
+/etc/redeem/printer.cfg
+/etc/toggle
+/usr/share/models

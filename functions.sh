@@ -186,119 +186,87 @@ prepare_environment() {
 	generate_line 80 '='
 }
 
+_umikaze_backup_directory=""
+
 backup_umikaze_settings() {
-	echo "##################################"
-	echo "MOUNTING ROOT RW"
-	echo "##################################"
+  generate_line 80 '='
+  echo_broadcast "creating/discovering storage partition"
 
-	mount -o remount,rw /
-	echo "mounted / with rw"
+  partitioner_output=$(/opt/scripts/tools/eMMC/partition.py || true)
 
-	echo "##################################"
-	echo "available partitions:"
-	echo `ls /dev/mmc*`
-	mkdir /tmp/input
-	echo "mounting $destination as input"
-	mount $destination"p1" /tmp/input
+  echo_broadcast "partitioner output:"
+  echo_broadcast "$partitioner_output"
 
-	echo "##################################"
-	echo "mounted eMMC to /tmp/input"
-	echo "##################################"
+  storage_partition=$(echo "$partitioner_output" | grep "storage partition ready" | awk '{print $NF}')
 
-	INPUT=/tmp/input
+  if [ "x${storage_partition}" != "x" ] ; then
+    echo_broadcast "==> Found storage partition - making a filesystem"
 
-	if [ -f $INPUT/etc/kamikaze-release ]; then
-		echo "##################################"
-		echo "Detected a kamikaze-release file, backup of configs beginning."
-		echo "##################################"
-		# copy the hostname over
-		cp -Lf $INPUT/etc/hostname /etc/hostname
-		# backup the content of hosts
-		cat $INPUT/etc/hosts >> /etc/hosts
+    mkfs.ext4 -F ${storage_partition}
+    echo_broadcast "====> Created filesystem"
+    echo_broadcast "====> Copying files into it"
 
-		if [ -d $INPUT/etc/avahi ]; then
-			cp -Lrf $INPUT/etc/avahi /etc/
-		fi
+    input_dir=/tmp/input
+    output_dir=/tmp/storage
 
-		if [ -d $INPUT/root/.ssh ]; then
-			cp -Lrf $INPUT/root/.ssh /root/
-		fi
+    echo_broadcast "available partitions:"
+    echo_broadcast `ls /dev/mmc*`
+    mkdir $input_dir
+    echo "mounting $destination as $input_dir"
+    mount $destination"p1" $input_dir
 
-		# copy the network config over from 2.1.0+
-		if [ -d $INPUT/etc/NetworkManager ]; then
-			echo "Network manager config..."
-			cp -Lrf $INPUT/etc/NetworkManager /etc/
-			echo "done"
-		fi
-		if [ -d $INPUT/home/octo/.octoprint ]; then
-			echo "updating octoprint's name with the new Umikaze release name"
-			# use sed to modify the octoprint config.yaml to register the new Umikaze version
-			VERSION=`cat /etc/kamikaze-release | awk -F ' ' '{print $1 $2}'`
-			sed -i "s/name: .*kaze.*/name: $VERSION/" $INPUT/home/octo/.octoprint/config.yaml
-			echo "done"
-			HOSTNAME=`cat /etc/hostname`
-			sed -i "s\kamikaze.local:8080/?action=stream\$HOSTNAME:8080/?action=stream\\" $INPUT/home/octo/.octoprint/config.yaml
-			sed -i "s\kamikaze.local:8080/?action=snapshot\localhost:8080/?action=snapshot\\" $INPUT/home/octo/.octoprint/config.yaml
+    mkdir $output_dir
+    echo "mounting $storage_partition as $output_dir"
+    mount $storage_partition $output_dir
 
+    if [ -f $input_dir/etc/kamikaze-release ]; then
+      generate_line 80 '='
+      echo "Detected a kamikaze-release file, backup of configs beginning."
+      generate_line 80 '='
 
-			# clear the logs from the .octoprint folder
-			if [ -f $INPUT/home/octo/.octoprint/logs/plugin_redeem.log ]; then
-				rm $INPUT/home/octo/.octoprint/logs/plugin_redeem.log
-			fi
-			if [ -f $INPUT/home/octo/.octoprint/logs/octoprint.log ]; then
-				rm $INPUT/home/octo/.octoprint/logs/octoprint.log*
-			fi
-			if [ -f $INPUT/home/octo/.octoprint/logs/serial.log ]; then
-				rm $INPUT/home/octo/.octoprint/logs/serial.log*
-			fi
+      if [ -d $input_dir/home/octo/.octoprint ]; then
+        echo "updating octoprint's name with the new Umikaze release name"
+        # use sed to modify the octoprint config.yaml to register the new Umikaze version    
+        VERSION=`cat /etc/kamikaze-release | awk -F ' ' '{print $1 $2}'`
+        sed -i "s/name: .*kaze.*/name: $VERSION/" $input_dir/home/octo/.octoprint/config.yaml
+        echo "done"
+        HOSTNAME=`cat /etc/hostname`
+        sed -i "s,kamikaze.local:8080/?action=stream,$HOSTNAME:8080/?action=stream," $input_dir/home/octo/.octoprint/config.yaml
+        sed -i "s,kamikaze.local:8080/?action=snapshot,localhost:8080/?action=snapshot," $input_dir/home/octo/.octoprint/config.yaml
 
-			echo "Backup of octoprint instance config..."
-			# copy the OctoPrint configuration, overwrite it.
-			cp -Lrf $INPUT/home/octo/.octoprint /home/octo/
-			echo "done"
-			chown -R octo:octo /home/octo/
-		fi
+        # clear the logs from the .octoprint folder
+        if [ -f $input_dir/home/octo/.octoprint/logs/plugin_redeem.log ]; then
+          rm $input_dir/home/octo/.octoprint/logs/plugin_redeem.log
+        fi
+        if [ -f $input_dir/home/octo/.octoprint/logs/octoprint.log ]; then
+          rm $input_dir/home/octo/.octoprint/logs/octoprint.log*
+        fi
+        if [ -f $input_dir/home/octo/.octoprint/logs/serial.log ]; then
+          rm $input_dir/home/octo/.octoprint/logs/serial.log*
+        fi
+      fi
+      get_rsync_options
+      rsync -aAxv $rsync_options --files-from=/opt/scripts/tools/eMMC/umikaze-files --ignore-missing-args $input_dir $output_dir
 
-		# copy the Redeem local.cfg file over
-		if [ -f $INPUT/etc/redeem/local.cfg ]; then
-			echo "Backup of Redeem's local.cfg"
-			cp -Lf $INPUT/etc/redeem/local.cfg /etc/redeem/local.cfg
-			echo "done"
-		fi
-		if [ -f $INPUT/etc/redeem/printer.cfg ]; then
-			echo "Backup of Redeem's printer.cfg"
-			cp -d $INPUT/etc/redeem/printer.cfg /etc/redeem/printer.cfg
-			echo "done"
-		fi
+      _umikaze_backup_directory="$output_dir"
 
-		chown -R octo:octo /etc/redeem/
+      # the octoprint UID may have changed across releases - fix it up now
+      chown -R octo:octo $output_dir/etc/redeem/
+      chown -R octo:octo $output_dir/home/octo/
+      chown -R octo:octo $output_dir/etc/toggle/
 
-		if [ -d $INPUT/etc/toggle/ ]; then
-			echo "Backup of Toggle's configuration"
-			# copy the Toggle local.cfg file over
-			cp -rfL $INPUT/etc/toggle/ /etc/
-			echo "done"
-		fi
+    fi
 
-		chown -R octo:octo /etc/toggle/
-
-		if [ -d $INPUT/usr/share/models ]; then
-			echo "Backup of user's GCode files"
-			# copy the gcodes in /usr/share/models
-			cp -Lrf $INPUT/usr/share/models/* /usr/share/models
-			echo "done"
-		fi
-	fi
-	echo "##################################"
-	echo "BACKUP FINISHED"
-	echo "##################################"
-	echo "Unmount of eMMC"
-	umount $INPUT
-	echo "done"
-	rmdir $INPUT
-	echo "Remount SD as RO"
-	mount -o remount,ro /
-	echo "done"
+    generate_line 80 '='
+    echo_broadcast "BACKUP FINISHED"
+    generate_line 80 '='
+    echo "##################################"
+    echo "Unmount of eMMC"
+    umount $input_dir
+    echo "done"
+    rmdir $input_dir
+    echo "done"
+  fi
 }
 
 prepare_environment_reverse() {
@@ -1080,6 +1048,12 @@ _copy_rootfs() {
   generate_line 40
   get_rsync_options
   rsync -aAx $rsync_options /* ${tmp_rootfs_dir} --exclude={/dev/*,/proc/*,/sys/*,/tmp/*,/run/*,/mnt/*,/media/*,/lost+found,/lib/modules/*,/uEnv.txt} || write_failure
+  if [ "x${_umikaze_backup_directory}" != "x" ] ; then
+    echo_broadcast "Copying: Umikaze backup to ${rootfs_partition}"
+    rsync -aAxv $rsync_options --files-from=/opt/scripts/tools/eMMC/umikaze-files --ignore-missing-args ${_umikaze_backup_directory} ${tmp_rootfs_dir}
+    umount ${_umikaze_backup_directory}
+  fi
+
   flush_cache
   generate_line 40
   echo_broadcast "==> Copying: Kernel modules"

@@ -42,7 +42,9 @@ unzip \
 cpufrequtils \
 f2fs-tools \
 ti-pru-cgt-installer \
-ffmpeg
+ffmpeg \
+parted \
+python-parted
 
 apt-get -y autoremove
 apt-get -y purge linux-image-4.9.* linux-image-4.4.*
