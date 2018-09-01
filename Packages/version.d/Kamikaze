@@ -2,7 +2,6 @@
 UMIKAZE_REPOSITORY="https://github.com/intelligent-agent/Umikaze.git"
 UMIKAZE_BRANCH="master"
 UMIKAZE_HOME="/usr/src/Umikaze"
-
 # This specifies the Kamikaze Variables
 VERSION="Umikaze 2.2.1-dev1"
 ROOTPASS="kamikaze"
