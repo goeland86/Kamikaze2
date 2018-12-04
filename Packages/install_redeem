@@ -79,7 +79,7 @@ chmod +x /usr/local/bin/update-redeem
 cat > /lib/systemd/system/redeem.service <<EOF
 [Unit]
 After=dev-steppers.device
-Requires=steppers.device
+Requires=dev-steppers.device
 Description=The Replicape Daemon
 
 [Service]
