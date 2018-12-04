@@ -16,4 +16,7 @@ fi
 cd ${OCTOPRINT_TOGGLE_HOME}
 git pull
 git checkout ${OCTOPRINT_TOGGLE_BRANCH}
+
+source ${OCTOPRINT_HOME}/Octoprint/venv/bin/activate
+
 python setup.py clean install

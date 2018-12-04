@@ -16,4 +16,7 @@ fi
 cd ${OCTOPRINT_REDEEM_HOME}
 git pull
 git checkout ${OCTOPRINT_REDEEM_BRANCH}
+
+source ${OCTOPRINT_HOME}/Octoprint/venv/bin/activate
+
 python setup.py clean install
