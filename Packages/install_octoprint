@@ -14,24 +14,25 @@ cd OctoPrint
 if [ ! -d $OCTOPRINT_HOME ]; then
   mkdir -p $OCTOPRINT_HOME
 fi
-if [ ! -d $OCTOPRINT_HOME/Octoprint ]; then
-  git clone ${OCTOPRINT_REPOSITORY} --no-single-branch --depth 1 $OCTOPRINT_HOME/Octoprint
-fi
 
 # Make config file for Octoprint
 cp config.yaml ${OCTOPRINT_HOME}/.octoprint/
 sed -i "s/KAMIKAZE/$VERSION/" ${OCTOPRINT_HOME}/.octoprint/config.yaml
 chown  -R octo:octo "${OCTOPRINT_HOME}/"
 
-chown -R octo:octo /usr/local/lib/python2.7/dist-packages/
-chown -R octo:octo /usr/local/bin/
+# instructions lovingly stolen from https://discourse.octoprint.org/t/setting-up-octoprint-on-a-raspberry-pi-running-raspbian/2337
+
 su - octo <<EOF
+  set -e
+  set -x
+  mkdir ${OCTOPRINT_HOME}/Octoprint
   cd ${OCTOPRINT_HOME}/Octoprint
-  git pull
-  git checkout tags/${OCTOPRINT_RELEASE}
-  python setup.py clean install
-  pip install https://github.com/Salandora/OctoPrint-FileManager/archive/master.zip --user
-  pip install https://github.com/kennethjiang/OctoPrint-Slicer/archive/master.zip --user
+  python2 -m virtualenv venv
+  source venv/bin/activate
+  pip install pip --upgrade
+  pip install https://github.com/foosel/OctoPrint/archive/${OCTOPRINT_RELEASE}.zip
+  pip install https://github.com/Salandora/OctoPrint-FileManager/archive/master.zip
+  pip install https://github.com/kennethjiang/OctoPrint-Slicer/archive/master.zip
 EOF
 
 # Fix permissions for STL upload folder
@@ -58,7 +59,7 @@ Description=OctoPrint
 
 [Service]
 Type=simple
-ExecStart=/usr/local/bin/octoprint serve
+ExecStart=/home/octo/Octoprint/venv/bin/octoprint serve
 Restart=always
 RestartSec=60
 User=octo

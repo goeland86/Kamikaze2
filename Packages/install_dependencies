@@ -17,6 +17,7 @@ apt-get install --no-install-recommends -y \
 python-pip \
 python-setuptools \
 python-dev \
+python-virtualenv \
 swig \
 socat \
 libyaml-dev \
