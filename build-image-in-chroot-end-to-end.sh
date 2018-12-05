@@ -42,9 +42,9 @@ e2fsck -f ${DEVICE}p1
 resize2fs ${DEVICE}p1
 
 mount ${DEVICE}p1 ${MOUNTPOINT}
-mount -o bind /dev ${MOUNTPOINT}/dev
-mount -o bind /sys ${MOUNTPOINT}/sys
-mount -o bind /proc ${MOUNTPOINT}/proc
+mount --rbind /dev ${MOUNTPOINT}/dev
+mount --rbind /sys ${MOUNTPOINT}/sys
+mount -t proc none ${MOUNTPOINT}/proc
 
 rm ${MOUNTPOINT}/etc/resolv.conf
 cp /etc/resolv.conf ${MOUNTPOINT}/etc/resolv.conf
