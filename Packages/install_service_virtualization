@@ -1,0 +1,57 @@
+#!/bin/bash
+# SPDX-License-Identifier: GPL-2.0
+
+set -e
+for f in `ls ${VERSIONING}/*`
+  do
+    source $f
+  done
+cd Packages
+
+echo "**Infrastructure for virtualized services**"
+set -x
+
+pip2 install virtualenv
+
+cat > /usr/local/bin/environment_for <<EOF
+#!/usr/bin/awk -f
+# coding=utf-8
+
+BEGIN {
+  key=ARGV[1];
+  ARGV[1]="/usr/local/etc/Select_A_Service.conf";
+  desired_section_header = "[[]" key "]"
+  FS="=";
+  # Provide a default
+  result = "."
+}
+
+/[[]/ {
+  # Starting a new section
+  in_section=0
+}
+
+\$0 ~ desired_section_header  {
+  in_section=1
+}
+
+/virtual_environment/ {
+  if(in_section) {
+    result = \$2;
+  }
+}
+
+END {
+  print result
+}
+EOF
+chmod +x /usr/local/bin/environment_for
+
+cat > /usr/local/etc/Select_A_Service.conf <<EOF
+# coding=utf-8
+# This file maintains the current state
+# for systemd services run under the
+# Select_A_Service protocol
+
+Configuration_File_Version="0.0.1"
+EOF

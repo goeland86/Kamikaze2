@@ -2,4 +2,4 @@
 REDEEM_REPOSITORY="https://github.com/intelligent-agent/redeem"
 REDEEM_BRANCH="RC"
 REDEEM_BRANCH_SINCE="2018-04-14"
-REDEEM_HOME="/usr/local/src/redeem"
+REDEEM_ENVIRONMENT="/usr/local/Redeem-${REDEEM_BRANCH}"

@@ -39,8 +39,8 @@ install_sgx
 setup_port_forwarding
 install_dependencies
 create_user
+install_service_virtualization
 install_redeem
-virtualize_redeem
 install_octoprint
 install_octoprint_redeem
 install_octoprint_toggle
