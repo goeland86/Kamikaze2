@@ -8,6 +8,8 @@ exec 2> >(tee -ia /root/prep_ubuntu.log >&2)
 upgrade_base_operating_system() {
   echo "Upgrading packages"
   apt-get update
+  # nuke GRUB so it doesn't prompt about config changes
+  apt-get remove -y grub-efi-arm
   apt-get upgrade -y
   echo "Removing unwanted kernel packages"
 # apt-get -y remove linux-image-*
