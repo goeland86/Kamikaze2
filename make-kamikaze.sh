@@ -44,7 +44,6 @@ install_redeem
 install_octoprint
 install_octoprint_redeem
 install_octoprint_toggle
-install_overlays
 install_toggle
 # install_cura
 # install_slic3r
