@@ -10,6 +10,53 @@ cd Packages
 
 echo "** install toggle **"
 set -x
+
+# first get the dependencies
+apt install -y \
+ gir1.2-clutter-1.0=1.26.0+dfsg-10.1 \
+ gir1.2-cogl-1.0=1.22.2-2.1 \
+ gir1.2-coglpango-1.0=1.22.2-2.1 \
+ gir1.2-mash-0.3-0=0.3.0-1 \
+ gir1.2-mx-2.0=1.99.4-1.1 \
+ libclutter-1.0-0=1.26.0+dfsg-10.1 \
+ libclutter-1.0-common=1.26.0+dfsg-10.1  \
+ libclutter-imcontext-0.1-0=0.1.4-3.1 \
+ libclutter-imcontext-0.1-bin=0.1.4-3.1 \
+ libcluttergesture-0.0.2-0=0.0.2.1-7.2 \
+ libcogl-common=1.22.2-2.1 \
+ libcogl-pango20=1.22.2-2.1 \
+ libcogl-path20=1.22.2-2.1 \
+ libcogl20=1.22.2-2.1 \
+ libmash-0.3-0=0.3.0-1 \
+ libmx-2.0-0=1.99.4-1.1 \
+ libmx-bin=1.99.4-1.1 \
+ libmx-common=1.99.4-1.1 \
+ python-networkmanager \
+ python-gi-cairo \
+ python-tornado \
+
+apt-mark hold \
+ gir1.2-clutter-1.0 \
+ gir1.2-cogl-1.0 \
+ gir1.2-coglpango-1.0 \
+ gir1.2-mash-0.3-0 \
+ gir1.2-mx-2.0 \
+ libclutter-1.0-0 \
+ libclutter-1.0-common \
+ libclutter-imcontext-0.1-0 \
+ libclutter-imcontext-0.1-bin \
+ libcluttergesture-0.0.2-0 \
+ libcogl-common \
+ libcogl-pango20 \
+ libcogl-path20 \
+ libcogl20 \
+ libmash-0.3-0 \
+ libmx-2.0-0 \
+ libmx-bin \
+ libmx-common \
+
+pip install requests pyconnman
+
 if [ ! -d "${TOGGLE_HOME}" ]; then
   git clone --no-single-branch --depth 1 ${TOGGLE_REPOSITORY} ${TOGGLE_HOME}
 fi
