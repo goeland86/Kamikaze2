@@ -43,7 +43,7 @@ apt-get -y remove python-pip
 hash -r pip
 
 apt-get -y autoremove
-apt-get -y purge linux-image-4.9.* linux-image-4.4.*
+# apt-get -y purge linux-image-4.9.* linux-image-4.4.*
 apt-mark hold linux-image-`cat /boot/uEnv.txt | awk -F '=' '/uname_r/ {print $2}'`
 
 pip install numpy
