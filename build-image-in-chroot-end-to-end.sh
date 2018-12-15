@@ -11,8 +11,18 @@ if [ -f "customize.sh" ] ; then
   source customize.sh
 fi
 
-TARGETIMAGE=kamikaze-rootfs.img
-MOUNTPOINT=$(mktemp -d /tmp/umikaze-root.XXXXXX)
+for f in `ls Packages/version.d/_*`
+  do
+    source $f
+  done
+
+if [ -f "customize.sh" ] ; then
+  source customize.sh
+fi
+
+
+TARGETIMAGE=target-rootfs.img
+MOUNTPOINT=$(mktemp -d /tmp/target-root.XXXXXX)
 
 BASEIMAGE=`basename ${BASEIMAGE_URL}`
 

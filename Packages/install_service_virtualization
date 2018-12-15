@@ -2,10 +2,20 @@
 # SPDX-License-Identifier: GPL-2.0
 
 set -e
-for f in `ls ${VERSIONING}/*`
+for f in `ls Packages/version.d/*`
   do
     source $f
   done
+if [ -f "customize.sh" ] ; then
+  source customize.sh
+fi
+for f in `ls Packages/version.d/_*`
+  do
+    source $f
+  done
+if [ -f "customize.sh" ] ; then
+  source customize.sh
+fi
 cd Packages
 
 echo "**Infrastructure for virtualized services**"

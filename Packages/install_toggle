@@ -8,7 +8,7 @@ for f in `ls ${VERSIONING}/*`
   done
 cd Packages
 
-echo "**install_toggle**"
+echo "** install_toggle **"
 set -x
 
 # first get the dependencies

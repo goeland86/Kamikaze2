@@ -26,10 +26,24 @@ exec 2> >(tee -ia /root/make-kamikaze.log >&2)
 
 # Get the versioning information from the entries in version.d/
 export VERSIONING=`pwd`/Packages/version.d
-for f in `ls ${VERSIONING}/*`
+for f in `ls Packages/version.d/*`
   do
     source $f
   done
+
+if [ -f "customize.sh" ] ; then
+  source customize.sh
+fi
+
+for f in `ls Packages/version.d/_*`
+  do
+    source $f
+  done
+
+if [ -f "customize.sh" ] ; then
+  source customize.sh
+fi
+
 
 echo "**Making ${VERSION}**"
 export LC_ALL=C

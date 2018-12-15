@@ -1,0 +1,8 @@
+# This needs to be last in case something overrides a variable
+if [ UMIKAZE_BRANCH == "master" ]; then
+  VERSION="Umikaze 2.2.1"
+else
+  VERSION="Umikaze 2.2.1-${UMIKAZE_BRANCH}"
+fi
+REDEEM_ENVIRONMENT="/usr/local/Redeem-${REDEEM_BRANCH}"
+TOGGLE_ENVIRONMENT="/usr/local/Toggle-${TOGGLE_BRANCH}"
