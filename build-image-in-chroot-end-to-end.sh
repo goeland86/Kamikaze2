@@ -71,6 +71,7 @@ shopt -u dotglob
 
 if [ -f "customize.sh" ]; then
   add_custom_account
+  provide_access_to_private_repos
   perform_minimal_reconfiguration
 fi
 
