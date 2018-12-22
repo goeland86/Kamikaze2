@@ -8,7 +8,7 @@ for f in `ls ${VERSIONING}/*`
   done
 cd Packages
 
-echo "** install toggle **"
+echo "**install_toggle**"
 set -x
 
 # first get the dependencies
@@ -57,16 +57,82 @@ apt-mark hold \
 
 pip install requests pyconnman
 
-if [ ! -d "${TOGGLE_HOME}" ]; then
-  git clone --no-single-branch --depth 1 ${TOGGLE_REPOSITORY} ${TOGGLE_HOME}
+if [ ! -d ${TOGGLE_ENVIRONMENT} ]; then
+  python2 -m virtualenv ${TOGGLE_ENVIRONMENT}
 fi
-cd ${TOGGLE_HOME}
-git pull
-git checkout ${TOGGLE_BRANCH}
-python setup.py clean install
-# Make it writable for updates
-cp -r configs /etc/toggle
-chown -R octo:octo ${TOGGLE_HOME}/
-cp systemd/toggle.service /lib/systemd/system/
+
+cat >${TOGGLE_ENVIRONMENT}/lib/python2.7/site-packages/dist-packages.pth <<EOF
+import sys; sys.__plen = len(sys.path)
+/usr/lib/python2.7/dist-packages
+/usr/local/lib/python2.7/dist-packages
+EOF
+
+if [ ! -d ${TOGGLE_ENVIRONMENT}/src/toggle ]; then
+  mkdir -p ${TOGGLE_ENVIRONMENT}/src/toggle
+  rm -rf ${TOGGLE_ENVIRONMENT}/src/toggle
+  git clone --no-single-branch --depth 1 ${TOGGLE_REPOSITORY} ${TOGGLE_ENVIRONMENT}/src/toggle
+fi
+
+# Register toggle in the Select_A_Service configuration
+cat >> /usr/local/etc/Select_A_Service.conf <<EOF
+[toggle]
+name=${TOGGLE_BRANCH}
+virtual_environment=Toggle-${TOGGLE_BRANCH}
+printer=None
+EOF
+
+cat > /usr/local/bin/toggle <<EOF
+#!/bin/bash
+# This shim runs the version of toggle selected
+# by the Select_A_Service configuration
+
+VENV=\`/usr/local/bin/environment_for toggle\`
+
+/usr/local/\${VENV}/bin/toggle
+EOF
+
+chmod +x /usr/local/bin/toggle
+
+# Install Umikaze specific systemd script
+cat > /lib/systemd/system/toggle.service <<EOF
+[Unit]
+Description=The Redeem/Replicape Graphical user interface
+After=octoprint.service sgx-startup.service
+Requires=octoprint.service sgx-startup.service
+
+[Service]
+Type=simple
+ExecStartPre=/bin/systemctl stop getty@tty1.service
+ExecStartPre=/bin/bash -c '/bin/echo 0 > /sys/class/graphics/fbcon/cursor_blink'
+ExecStart=/usr/local/bin/toggle
+ExecStopPost=/bin/systemctl start getty@tty1.service
+ExecStopPost=/bin/bash -c '/bin/echo 1 > /sys/class/graphics/fbcon/cursor_blink'
+
+[Install]
+WantedBy=basic.target
+EOF
+
 systemctl enable toggle
-chown -R octo:octo /etc/toggle/
+# systemctl start toggle
+
+# Do the actual installation
+source ${TOGGLE_ENVIRONMENT}/bin/activate
+cd ${TOGGLE_ENVIRONMENT}/src/toggle
+git fetch
+git checkout $TOGGLE_BRANCH
+python setup.py clean install
+
+#This is a hack for Umikaze 2.2.1 compatibility
+__TOGGLE_ENVIRONMENT=${TOGGLE_ENVIRONMENT}
+TOGGLE_ENVIRONMENT=""
+
+# Make profiles uploadable via Octoprint
+mkdir -p ${TOGGLE_ENVIRONMENT}/etc/toggle
+cp configs/*.cfg ${TOGGLE_ENVIRONMENT}/etc/toggle/
+touch ${TOGGLE_ENVIRONMENT}/etc/toggle/local.cfg
+chown -R octo:octo ${TOGGLE_ENVIRONMENT}/etc/toggle
+
+#Undo hack for Umikaze 2.2.1 compatibility
+TOGGLE_ENVIRONMENT=${__TOGGLE_ENVIRONMENT}
+
+chown -R octo:octo ${TOGGLE_ENVIRONMENT}
