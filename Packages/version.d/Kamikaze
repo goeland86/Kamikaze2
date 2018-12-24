@@ -5,4 +5,5 @@ UMIKAZE_HOME="/usr/src/Umikaze"
 
 # This specifies the Kamikaze Variables
 VERSION="Umikaze 2.2.1-RC1"
-ROOTPASS="kamikaze"
+MASTER_PASSWORD="kamikaze"
+MASTER_HOSTNAME="kamikaze"
