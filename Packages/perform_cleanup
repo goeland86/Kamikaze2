@@ -8,8 +8,6 @@ for f in `ls ${VERSIONING}/*`
   done
 set -x
 
-userdel ubuntu
-chage -d 0 root
 rm -rf /var/cache/*
 rm -f GFX_5.01.01.02_es8.x.tar.gz
 rm -rf /usr/src/pru-software-support-package/examples /usr/src/pru-software-support-package/labs
