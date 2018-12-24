@@ -32,6 +32,15 @@ KERNEL=="spidev2.1", TAG+="systemd", SYMLINK+="steppers"
 KERNEL=="spidev1.1", TAG+="systemd", SYMLINK+="steppers", SYMLINK+="spidev2.1"
 EOF
 
+# Annotate ports in /etc/services
+sed -i "/redeem/d" /etc/services
+cat >>/etc/services <<EOF
+redeem       50000/tcp
+EOF
+
+# Provide permissions to restart redeem
+echo "%octo ALL=NOPASSWD: /bin/systemctl restart redeem.service" >> /etc/sudoers.d/octo
+
 # Install Umikaze specific systemd script
 cat > /lib/systemd/system/redeem.service <<EOF
 [Unit]
@@ -47,10 +56,3 @@ WantedBy=basic.target
 EOF
 
 systemctl enable redeem
-# systemctl start redeem
-
-# Annotate ports in /etc/services
-sed -i "/redeem/d" /etc/services
-cat >>/etc/services <<EOF
-redeem       50000/tcp
-EOF

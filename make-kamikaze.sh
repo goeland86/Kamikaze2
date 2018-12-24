@@ -38,7 +38,7 @@ export PATH=`pwd`/Packages:$PATH
 install_sgx
 setup_port_forwarding
 install_dependencies
-create_user
+create_octoprint_user
 install_redeem
 virtualize_redeem
 install_octoprint

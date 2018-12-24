@@ -22,7 +22,12 @@ cd mjpg-streamer-experimental
 sed -i "s:add_subdirectory(plugins/input_raspicam):#add_subdirectory(plugins/input_raspicam):" CMakeLists.txt
 make
 make install
+
 echo "KERNEL==\"video0\", TAG+=\"systemd\"" > /etc/udev/rules.d/50-video.rules
+
+# Provide permissions to restart video streaming
+echo "%octo ALL=NOPASSWD: /bin/systemctl restart mjpg.service" >> /etc/sudoers.d/octo
+
 cat > /lib/systemd/system/mjpg.service << EOL
 [Unit]
 Description=Mjpg streamer
@@ -35,5 +40,5 @@ ExecStart=/usr/local/bin/mjpg_streamer -i "/usr/local/lib/mjpg-streamer/input_uv
 [Install]
 WantedBy=basic.target
 EOL
+
 systemctl enable mjpg.service
-systemctl start mjpg.service

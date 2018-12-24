@@ -17,3 +17,6 @@ cd ${OCTOPRINT_TOGGLE_HOME}
 git pull
 git checkout ${OCTOPRINT_TOGGLE_BRANCH}
 python setup.py clean install
+
+# Provide permissions to execute install toggle
+echo "%octo ALL=NOPASSWD: /usr/bin/make -C /usr/src/toggle install" >> /etc/sudoers.d/octo

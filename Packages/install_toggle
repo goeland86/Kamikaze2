@@ -17,9 +17,16 @@ cd ${TOGGLE_HOME}
 git pull
 git checkout ${TOGGLE_BRANCH}
 python setup.py clean install
+
 # Make it writable for updates
-cp -r configs /etc/toggle
-chown -R octo:octo ${TOGGLE_HOME}/
-cp systemd/toggle.service /lib/systemd/system/
-systemctl enable toggle
+mkdir -p /etc/toggle
+cp -r configs/* /etc/toggle
 chown -R octo:octo /etc/toggle/
+chown -R octo:octo ${TOGGLE_HOME}/
+
+# Provide permissions to restart toggle
+echo "%octo ALL=NOPASSWD: /bin/systemctl restart toggle.service" >> /etc/sudoers.d/octo
+
+cp systemd/toggle.service /lib/systemd/system/
+
+systemctl enable toggle

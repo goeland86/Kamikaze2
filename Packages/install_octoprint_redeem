@@ -17,3 +17,6 @@ cd ${OCTOPRINT_REDEEM_HOME}
 git pull
 git checkout ${OCTOPRINT_REDEEM_BRANCH}
 python setup.py clean install
+
+# Provide permissions to execute install redeem
+echo "%octo ALL=NOPASSWD: /usr/bin/make -C /usr/local/src/redeem install" >> //etc/sudoers.d/octo
