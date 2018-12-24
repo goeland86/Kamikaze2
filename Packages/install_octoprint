@@ -41,15 +41,10 @@ chown octo:octo /usr/share/models
 chmod 777 /usr/share/models
 
 # Grant octo restart rights
-echo "%octo ALL=NOPASSWD: /bin/systemctl restart redeem.service" >> /etc/sudoers
-echo "%octo ALL=NOPASSWD: /bin/systemctl restart toggle.service" >> /etc/sudoers
-echo "%octo ALL=NOPASSWD: /bin/systemctl restart mjpg.service" >> /etc/sudoers
-echo "%octo ALL=NOPASSWD: /bin/systemctl restart octoprint.service" >> /etc/sudoers
-echo "%octo ALL=NOPASSWD: /sbin/reboot" >> /etc/sudoers
-echo "%octo ALL=NOPASSWD: /sbin/shutdown -h now" >> /etc/sudoers
-echo "%octo ALL=NOPASSWD: /sbin/poweroff" >> /etc/sudoers
-echo "%octo ALL=NOPASSWD: /usr/bin/make -C /usr/local/src/redeem install" >> /etc/sudoers
-echo "%octo ALL=NOPASSWD: /usr/bin/make -C /usr/src/toggle install" >> /etc/sudoers
+echo "%octo ALL=NOPASSWD: /bin/systemctl restart octoprint.service" >> /etc/sudoers.d/octo
+echo "%octo ALL=NOPASSWD: /sbin/reboot" >> /etc/sudoers.d/octo
+echo "%octo ALL=NOPASSWD: /sbin/shutdown -h now" >> /etc/sudoers.d/octo
+echo "%octo ALL=NOPASSWD: /sbin/poweroff" >> /etc/sudoers.d/octo
 
 # Install systemd script
 cat > /lib/systemd/system/octoprint.service <<EOF
@@ -68,4 +63,4 @@ WantedBy=multi-user.target
 EOF
 
 systemctl enable octoprint
-systemctl start octoprint
+#systemctl start octoprint

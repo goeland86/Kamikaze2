@@ -136,3 +136,6 @@ chown -R octo:octo ${TOGGLE_ENVIRONMENT}/etc/toggle
 TOGGLE_ENVIRONMENT=${__TOGGLE_ENVIRONMENT}
 
 chown -R octo:octo ${TOGGLE_ENVIRONMENT}
+
+# Provide permissions to restart toggle
+echo "%octo ALL=NOPASSWD: /bin/systemctl restart toggle.service" >> /etc/sudoers.d/octo

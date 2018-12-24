@@ -36,4 +36,7 @@ ExecStart=/usr/local/bin/mjpg_streamer -i "/usr/local/lib/mjpg-streamer/input_uv
 WantedBy=basic.target
 EOL
 systemctl enable mjpg.service
-systemctl start mjpg.service
+#systemctl start mjpg.service
+
+# Provide permissions to restart video streaming
+echo "%octo ALL=NOPASSWD: /bin/systemctl restart mjpg.service" >> /etc/sudoers.d/octo

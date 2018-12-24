@@ -19,3 +19,6 @@ chown -R octo:octo ${OCTOPRINT_HOME}
 chown -R octo:octo /usr/local/lib/python2.7/
 chown -R octo:octo /usr/local/bin
 chmod 755 -R /usr/local/lib/python2.7/
+
+# The octo user will get sudo permissions
+echo "# Explicit Permissions for Octoprint" > /etc/sudoers.d/octo

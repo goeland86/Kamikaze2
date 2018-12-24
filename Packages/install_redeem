@@ -92,3 +92,6 @@ chown -R octo:octo ${REDEEM_ENVIRONMENT}/etc/redeem
 REDEEM_ENVIRONMENT=${__REDEEM_ENVIRONMENT}
 
 chown -R octo:octo ${REDEEM_ENVIRONMENT}
+
+# Provide permissions to restart redeem
+echo "%octo ALL=NOPASSWD: /bin/systemctl restart redeem.service" >> /etc/sudoers.d/octo
