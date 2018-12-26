@@ -48,3 +48,9 @@ EOF
 
 systemctl enable redeem
 # systemctl start redeem
+
+# Annotate ports in /etc/services
+sed -i "/redeem/d" /etc/services
+cat >>/etc/services <<EOF
+redeem       50000/tcp
+EOF

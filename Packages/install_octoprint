@@ -67,4 +67,10 @@ WantedBy=multi-user.target
 EOF
 
 systemctl enable octoprint
-systemctl start octoprint
+#systemctl start octoprint
+
+# Annotate ports in /etc/services
+sed -i "/octoprint/d" /etc/services
+cat >>/etc/services <<EOF
+octoprint         5000/tcp
+EOF
