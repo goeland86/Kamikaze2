@@ -35,9 +35,9 @@ plugins:
 printerParameters: {}
 serial:
   additionalPorts:
-  - /dev/octoprint_1
+  - /dev/redeem/octoprint
   baudrate: 115200
-  port: /dev/octoprint_1
+  port: /dev/redeem/octoprint
   timeout: {}
 server:
   commands:
