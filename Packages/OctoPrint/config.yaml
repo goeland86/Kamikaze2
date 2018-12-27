@@ -16,21 +16,21 @@ plugins:
       Redeem:
         checkout_folder: /usr/local/src/redeem
         type: git_commit
-        update_script: '{python} "/usr/local/src/redeem/update-redeem.py" --python="{python}" --sudo "{folder}" "{target}"'
+        update_script: /usr/local/bin/update-redeem
         restart: 'echo "Redeem dummy restart"'
       Toggle:
         checkout_folder: /usr/src/toggle
         type: git_commit
-        update_script: '{python} "/usr/src/toggle/update-toggle.py" --python="{python}" "{folder}" "{target}"'
+        update_script: /usr/local/bin/update-toggle
         restart: 'echo "Toggle dummy restart"'
       octoprint:
         checkout_folder: /home/octo/OctoPrint
         prerelease: false
         type: github_release
       Kamikaze:
-        checkout_folder: /usr/src/Kamikaze2
+        checkout_folder: /usr/src/Umikaze
         type: git_commit
-        update_script: '/usr/src/Kamikaze2/update-kamikaze.sh'
+        update_script: '/usr/src/Umikaze/update-kamikaze.sh'
         restart: 'echo "Kamikaze dummy restart"'
 printerParameters: {}
 serial:
