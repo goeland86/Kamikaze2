@@ -18,12 +18,7 @@ python-pip \
 python-setuptools \
 python-dev \
 python-virtualenv \
-swig \
-socat \
 libyaml-dev \
-python-scipy \
-python-numpy \
-python-smbus \
 libavahi-compat-libdnssd1 \
 libnss-mdns \
 screen \
@@ -32,7 +27,6 @@ htop \
 unzip \
 cpufrequtils \
 f2fs-tools \
-ti-pru-cgt-installer \
 parted \
 python-parted
 
@@ -45,10 +39,3 @@ pip install --upgrade distribute
 apt-get -y autoremove
 apt-get -y purge linux-image-4.9.* linux-image-4.4.*
 apt-mark hold linux-image-`cat /boot/uEnv.txt | awk -F '=' '/uname_r/ {print $2}'`
-
-pip install numpy
-pip install evdev spidev Adafruit_BBIO Adafruit-GPIO sympy docutils sh
-
-if [ ! -d "/usr/src/pru-software-support-package" ]; then
-  git clone --branch v5.1.0 --single-branch --depth 1 git://git.ti.com/pru-software-support-package/pru-software-support-package.git /usr/src/pru-software-support-package
-fi

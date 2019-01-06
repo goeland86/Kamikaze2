@@ -11,6 +11,17 @@ cd Packages
 echo "** install_redeem **"
 set -x
 
+apt-get install --no-install-recommends -y \
+swig \
+python-scipy \
+python-numpy \
+python-smbus \
+ti-pru-cgt-installer
+
+if [ ! -d "/usr/src/pru-software-support-package" ]; then
+  git clone --branch v5.1.0 --single-branch --depth 1 git://git.ti.com/pru-software-support-package/pru-software-support-package.git /usr/src/pru-software-support-package
+fi
+
 if [ ! -d ${REDEEM_ENVIRONMENT} ]; then
   python2 -m virtualenv ${REDEEM_ENVIRONMENT}
   # python2 -m virtualenv --system-site-packages $REDEEM_ENVIRONMENT
