@@ -40,6 +40,8 @@ pip install --upgrade pip
 apt-get -y remove python-pip
 hash -r pip
 
+pip install --upgrade distribute
+
 apt-get -y autoremove
 apt-get -y purge linux-image-4.9.* linux-image-4.4.*
 apt-mark hold linux-image-`cat /boot/uEnv.txt | awk -F '=' '/uname_r/ {print $2}'`
