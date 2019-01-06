@@ -11,8 +11,14 @@ cd Packages
 echo "** install U-boot**"
 set -x
 cd ${UBOOT_HOME}
-export DISK=/dev/mmcblk0
-dd if=MLO of=${DISK} count=1 seek=1 bs=128k
-dd if=u-boot.img of=${DISK} count=2 seek=1 bs=384k
-cp MLO /boot/uboot/
-cp u-boot.img /boot/uboot/
+
+if [ ! -f ${UBOOT_SPL} ] ; then
+    wget ${UBOOT_SPL_URL}
+fi
+
+if [ ! -f ${UBOOT_BIN} ] ; then
+    wget ${UBOOT_BIN_URL}
+fi
+
+cp ${UBOOT_SPL} /opt/backup/uboot/MLO
+cp ${UBOOT_BIN} /opt/backup/uboot/u-boot.img

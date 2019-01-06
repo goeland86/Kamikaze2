@@ -47,7 +47,7 @@ install_octoprint_toggle
 install_toggle
 # install_cura
 # install_slic3r
-# install_u-boot
+install_u-boot
 make_general_adjustments
 install_usbreset
 install_smbd

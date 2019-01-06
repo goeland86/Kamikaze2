@@ -2,3 +2,10 @@
 # UBOOT_REPOSITORY="git://git.denx.de/u-boot.git"
 # UBOOT_BRANCH="master"
 UBOOT_HOME="${VERSIONING}/../u-boot"
+
+UBOOT_VERSION="2018.09-r8"
+
+UBOOT_SPL_URL="https://rcn-ee.com/repos/bootloader/am335x_evm/MLO-am335x_evm-v${UBOOT_VERSION}"
+UBOOT_SPL=`basename ${UBOOT_SPL_URL}`
+UBOOT_BIN_URL="https://rcn-ee.com/repos/bootloader/am335x_evm/u-boot-am335x_evm-v${UBOOT_VERSION}.img"
+UBOOT_BIN=`basename ${UBOOT_BIN_URL}`

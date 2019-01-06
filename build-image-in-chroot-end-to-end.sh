@@ -78,9 +78,12 @@ rmdir ${MOUNTPOINT}
 
 if [ $status -eq 0 ]; then
     echo "Looks like the image was prepared successfully - packing it up"
+    ./update-u-boot.sh $DEVICE
     ./generate-image-from-sd.sh $DEVICE
 else
     echo "image generation seems to have failed - cleaning up"
 fi
+
+
 
 losetup -d $DEVICE
