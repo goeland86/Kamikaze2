@@ -34,7 +34,6 @@ unzip \
 cpufrequtils \
 f2fs-tools \
 ti-pru-cgt-installer \
-ffmpeg \
 parted \
 python-parted
 
