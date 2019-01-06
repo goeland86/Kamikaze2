@@ -33,14 +33,6 @@ upgrade_base_operating_system() {
   depmod $KERNEL_VERSION
   update-initramfs -k $KERNEL_VERSION -u
 
-  echo "Updating wireless..."
-  apt-mark hold linux-firmware
-
-  if [ ! -d "/usr/src/wl18xx_fw" ]; then
-    git clone --no-single-branch --depth 1 git://git.ti.com/wilink8-wlan/wl18xx_fw.git /usr/src/wl18xx_fw
-  fi
-  cp /usr/src/wl18xx_fw/wl18xx-fw-4.bin /lib/firmware/ti-connectivity/wl18xx-fw-4.bin
-
   echo "Upgrade everything..."
   apt-get -y upgrade
 
