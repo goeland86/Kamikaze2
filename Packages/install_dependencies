@@ -40,6 +40,7 @@ python-parted
 pip install --upgrade pip
 apt-get -y remove python-pip
 hash -r pip
+pip install --upgrade distribute
 
 pip install numpy
 pip install evdev spidev Adafruit_BBIO Adafruit-GPIO sympy docutils sh
