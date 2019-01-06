@@ -32,6 +32,9 @@ python-smbus \
 ti-pru-cgt-installer
 
 pip install numpy evdev spidev Adafruit_BBIO Adafruit-GPIO sympy docutils sh
+if [ ! -d "/usr/src/pru-software-support-package" ]; then
+  git clone --branch v5.1.0 --single-branch --depth 1 git://git.ti.com/pru-software-support-package/pru-software-support-package.git /usr/src/pru-software-support-package
+fi
 
 cat >${REDEEM_ENVIRONMENT}/lib/python2.7/site-packages/dist-packages.pth <<EOF
 import sys; sys.__plen = len(sys.path)
