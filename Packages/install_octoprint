@@ -42,7 +42,6 @@ su - octo <<EOF
   pip install pip --upgrade
   pip install https://github.com/foosel/OctoPrint/archive/${OCTOPRINT_RELEASE}.zip
   pip install https://github.com/Salandora/OctoPrint-FileManager/archive/master.zip
-  pip install https://github.com/kennethjiang/OctoPrint-Slicer/archive/master.zip
 EOF
 
 # Fix permissions for STL upload folder
