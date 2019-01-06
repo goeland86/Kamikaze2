@@ -24,6 +24,15 @@ if [ ! -d ${REDEEM_ENVIRONMENT} ]; then
   python2 -m virtualenv ${REDEEM_ENVIRONMENT}
 fi
 
+apt-get install --no-install-recommends -y \
+swig \
+python-scipy \
+python-numpy \
+python-smbus \
+ti-pru-cgt-installer
+
+pip install numpy evdev spidev Adafruit_BBIO Adafruit-GPIO sympy docutils sh
+
 cat >${REDEEM_ENVIRONMENT}/lib/python2.7/site-packages/dist-packages.pth <<EOF
 import sys; sys.__plen = len(sys.path)
 /usr/lib/python2.7/dist-packages

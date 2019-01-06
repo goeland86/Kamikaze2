@@ -18,12 +18,7 @@ python-pip \
 python-setuptools \
 python-dev \
 python-virtualenv \
-swig \
-socat \
 libyaml-dev \
-python-scipy \
-python-numpy \
-python-smbus \
 python-gi-cairo \
 libavahi-compat-libdnssd1 \
 libnss-mdns \
@@ -33,7 +28,6 @@ htop \
 unzip \
 cpufrequtils \
 f2fs-tools \
-ti-pru-cgt-installer \
 parted \
 python-parted
 
@@ -41,10 +35,3 @@ pip install --upgrade pip
 apt-get -y remove python-pip
 hash -r pip
 pip install --upgrade distribute
-
-pip install numpy
-pip install evdev spidev Adafruit_BBIO Adafruit-GPIO sympy docutils sh
-
-if [ ! -d "/usr/src/pru-software-support-package" ]; then
-  git clone --branch v5.1.0 --single-branch --depth 1 git://git.ti.com/pru-software-support-package/pru-software-support-package.git /usr/src/pru-software-support-package
-fi
