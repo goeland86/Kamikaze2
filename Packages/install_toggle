@@ -27,6 +27,23 @@ chown -R octo:octo ${TOGGLE_HOME}/
 # Provide permissions to restart toggle
 echo "%octo ALL=NOPASSWD: /bin/systemctl restart toggle.service" >> /etc/sudoers.d/octo
 
-cp systemd/toggle.service /lib/systemd/system/
+# Install Umikaze specific systemd script
+cat > /lib/systemd/system/toggle.service <<EOF
+[Unit]
+Description=The Redeem/Replicape Graphical user interface
+After=octoprint.service sgx-startup.service
+Requires=octoprint.service sgx-startup.service
+
+[Service]
+Type=simple
+ExecStartPre=/bin/systemctl stop getty@tty1.service
+ExecStartPre=/bin/bash -c '/bin/echo 0 > /sys/class/graphics/fbcon/cursor_blink'
+ExecStart=/usr/local/bin/toggle
+ExecStopPost=/bin/systemctl start getty@tty1.service
+ExecStopPost=/bin/bash -c '/bin/echo 1 > /sys/class/graphics/fbcon/cursor_blink'
+
+[Install]
+WantedBy=basic.target
+EOF
 
 systemctl enable toggle
