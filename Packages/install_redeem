@@ -8,23 +8,25 @@ for f in `ls ${VERSIONING}/*`
   done
 cd Packages
 
-echo "**install_redeem**"
+echo "** install_redeem **"
 set -x
-if [ ! -d $REDEEM_HOME ]; then
-  git clone $REDEEM_REPOSITORY --single-branch --branch $REDEEM_BRANCH $REDEEM_HOME
-fi
-cd $REDEEM_HOME
-git pull
-git checkout $REDEEM_BRANCH
-python2 setup.py develop
 
-# Make profiles uploadable via Octoprint
-mkdir -p /etc/redeem
-cp configs/*.cfg /etc/redeem/
-cp data/*.cht /etc/redeem/
-touch /etc/redeem/local.cfg
-chown -R octo:octo /etc/redeem/
-chown -R octo:octo $REDEEM_HOME
+if [ ! -d ${REDEEM_ENVIRONMENT} ]; then
+  python2 -m virtualenv ${REDEEM_ENVIRONMENT}
+  # python2 -m virtualenv --system-site-packages $REDEEM_ENVIRONMENT
+fi
+
+cat >${REDEEM_ENVIRONMENT}/lib/python2.7/site-packages/dist-packages.pth <<EOF
+import sys; sys.__plen = len(sys.path)
+/usr/lib/python2.7/dist-packages
+/usr/local/lib/python2.7/dist-packages
+EOF
+
+if [ ! -d ${REDEEM_ENVIRONMENT}/src/redeem ]; then
+  mkdir -p ${REDEEM_ENVIRONMENT}/src/redeem
+  rm -rf ${REDEEM_ENVIRONMENT}/src/redeem
+  git clone ${REDEEM_REPOSITORY} --single-branch --branch $REDEEM_BRANCH ${REDEEM_ENVIRONMENT}/src/redeem
+fi
 
 # Install udev rules
 cat  > /etc/udev/rules.d/stepper_device.rules <<EOF
@@ -41,6 +43,38 @@ EOF
 # Provide permissions to restart redeem
 echo "%octo ALL=NOPASSWD: /bin/systemctl restart redeem.service" >> /etc/sudoers.d/octo
 
+# Register redeem in the Select_A_Service configuration
+cat >> /usr/local/etc/Select_A_Service.conf <<EOF
+[redeem]
+name=${REDEEM_BRANCH}
+virtual_environment=Redeem-${REDEEM_BRANCH}
+printer=None
+EOF
+
+cat > /usr/local/bin/redeem <<EOF
+#!/bin/bash
+# This shim runs the version of redeem selected
+# by the Select_A_Service configuration
+
+VENV=\`/usr/local/bin/environment_for redeem\`
+
+/usr/local/\${VENV}/bin/redeem
+EOF
+
+chmod +x /usr/local/bin/redeem
+
+cat > /usr/local/bin/update-redeem <<EOF
+#!/bin/bash
+# This shim runs the version of redeem updater
+# selected by the Select_A_Service configuration
+
+VENV=\`/usr/local/bin/environment_for redeem\`
+
+/usr/local/\${VENV}/bin/update-redeem
+EOF
+
+chmod +x /usr/local/bin/update-redeem
+
 # Install Umikaze specific systemd script
 cat > /lib/systemd/system/redeem.service <<EOF
 [Unit]
@@ -54,5 +88,28 @@ ExecStart=/usr/local/bin/redeem
 [Install]
 WantedBy=basic.target
 EOF
+
+# Do the actual installation
+source ${REDEEM_ENVIRONMENT}/bin/activate
+cd ${REDEEM_ENVIRONMENT}/src/redeem
+git fetch
+git checkout $REDEEM_BRANCH
+python setup.py develop
+
+#This is a hack for Umikaze 2.2.1 compatibility
+__REDEEM_ENVIRONMENT=${REDEEM_ENVIRONMENT}
+REDEEM_ENVIRONMENT=""
+
+# Make profiles uploadable via Octoprint
+mkdir -p ${REDEEM_ENVIRONMENT}/etc/redeem
+cp configs/*.cfg ${REDEEM_ENVIRONMENT}/etc/redeem/
+cp data/*.cht ${REDEEM_ENVIRONMENT}/etc/redeem/
+touch ${REDEEM_ENVIRONMENT}/etc/redeem/local.cfg
+chown -R octo:octo ${REDEEM_ENVIRONMENT}/etc/redeem
+
+#Undo hack for Umikaze 2.2.1 compatibility
+REDEEM_ENVIRONMENT=${__REDEEM_ENVIRONMENT}
+
+chown -R octo:octo ${REDEEM_ENVIRONMENT}
 
 systemctl enable redeem
