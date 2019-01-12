@@ -55,6 +55,9 @@ upgrade_base_operating_system() {
   # allow root logon to SSH
   sed -i '/PermitRootLogin/d' /etc/ssh/sshd_config
   echo 'PermitRootLogin yes' >>/etc/ssh/sshd_config
+
+  # disable the power button
+  echo "HandlePowerKey=ignore" >> /etc/systemd/logind.conf
 }
 
 add_thing_printer_support_repository() {
