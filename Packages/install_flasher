@@ -1,0 +1,27 @@
+#!/bin/bash
+# SPDX-License-Identifier: GPL-2.0
+
+set -e
+for f in `ls ${VERSIONING}/*`
+  do
+    source $f
+  done
+if [ -f "customize.sh" ] ; then
+  source customize.sh
+fi
+cd Packages
+
+echo "** install_flasher **"
+set -x
+cd Flasher
+
+cp functions.sh init-eMMC-flasher-v3.sh umikaze-files partition.py /opt/scripts/tools/eMMC/
+sed -i 's/#enable_/enable_/' /boot/uEnv.txt
+
+if [ x${FLASHER_IMAGE} == "xTRUE" ] ; then
+  echo "** FLASHER ACTIVATED **"
+else
+  DISABLE="#"
+fi
+sed -i '/eMMC-flasher/d' /boot/uEnv.txt
+echo "${DISABLE}cmdline=init=/opt/scripts/tools/eMMC/init-eMMC-flasher-v3.sh" >>/boot/uEnv.txt

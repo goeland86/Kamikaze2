@@ -21,7 +21,7 @@ set -x
 #echo "Please make sure the SD card and FAT formatted USB drive are inserted."
 #read -rsp $'Press any key to continue...\n' -n1 key
 
-# This is commended out because it currently cannot work, the script shuts the BB down after running
+# This is commented out because it currently cannot work, the script shuts the BB down after running
 #echo "Running script to clone eMMC to SD"
 #echo "/opt/scripts/tools/eMMC/beaglebone-black-make-microSD-flasher-from-eMMC.sh"
 echo
@@ -37,7 +37,6 @@ echo "Removing UUID references and uncommenting flasher option from /boot/uEnv.t
 MOUNTPOINT=$(mktemp -d /tmp/umikaze-sd.XXXXXX)
 mount $PARTITION ${MOUNTPOINT}
 sed -ie '/^uuid=/d' ${MOUNTPOINT}/boot/uEnv.txt
-sed -ie 's/#cmdline=init=\/opt\/scripts\/tools\/eMMC\/init-eMMC-flasher-v3.sh$/cmdline=init=\/opt\/scripts\/tools\/eMMC\/init-eMMC-flasher-v3.sh/' ${MOUNTPOINT}/boot/uEnv.txt
 echo "Removing WPA wifi access file just in case"
 rm -rf ${MOUNTPOINT}/root/wpa.conf
 echo "Clearing bash history"
@@ -136,5 +135,5 @@ dd if=$DEVICE bs=1MB count=${ddcount} | xz -T 0 > Umikaze-${UmikamiVersion}.img.
 echo
 
 # Talkie talkie
-echo "Image file generated on USB drive as Umikaze-${UmikamiVersion}.img.xz"
+echo "Image file generated as Umikaze-${UmikamiVersion}.img.xz"
 echo "USB drive and MicroSD card can be removed safely now."

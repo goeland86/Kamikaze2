@@ -56,6 +56,6 @@ install_videostreamer
 install_ffmpeg
 rebrand_ssh
 perform_cleanup
-prepare_flasher
+install_flasher
 
 echo "Now reboot!"

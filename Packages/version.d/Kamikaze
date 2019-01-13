@@ -8,3 +8,6 @@ VERSION="Umikaze 2.2.1-RC2"
 ADMIN_LOGIN_ACCOUNT="root"
 MASTER_PASSWORD="kamikaze"
 MASTER_HOSTNAME="kamikaze"
+
+# Activation of the flasher is optional
+FLASHER_IMAGE="FALSE"

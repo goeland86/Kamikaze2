@@ -49,4 +49,3 @@ check_eeprom
 check_running_system
 activate_cylon_leds
 prepare_drive
-
