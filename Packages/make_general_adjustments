@@ -14,7 +14,6 @@ cd Packages
 echo "** Performing general actions **"
 set -x
 sed -i "s/cape_universal=enable/consoleblank=0 fbcon=rotate:1 omap_wdt.nowayout=0/" /boot/uEnv.txt
-sed -i "s/AcceptEnv LANG LC_*/#AcceptEnv LANG LC_*/"  /etc/ssh/sshd_config
 
 # adjust the hostname
 echo ${MASTER_HOSTNAME} >/etc/hostname
