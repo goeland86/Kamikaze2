@@ -6,6 +6,9 @@ for f in `ls ${VERSIONING}/*`
   do
     source $f
   done
+if [ -f "customize.sh" ] ; then
+  source customize.sh
+fi
 cd Packages
 
 echo "** Performing general actions **"
