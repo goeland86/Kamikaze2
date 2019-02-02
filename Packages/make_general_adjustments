@@ -14,12 +14,16 @@ cd Packages
 echo "** Performing general actions **"
 set -x
 sed -i "s/cape_universal=enable/consoleblank=0 fbcon=rotate:1 omap_wdt.nowayout=0/" /boot/uEnv.txt
-sed -i "s/arm/kamikaze/" /etc/hostname
-sed -i "s/arm/kamikaze/g" /etc/hosts
 sed -i "s/AcceptEnv LANG LC_*/#AcceptEnv LANG LC_*/"  /etc/ssh/sshd_config
-echo "** Set Root password to $ROOTPASS **"
-echo "root:$ROOTPASS" | chpasswd
-chown -R octo:octo `pwd`
+
+# adjust the hostname
+echo ${MASTER_HOSTNAME} >/etc/hostname
+sed -i '/arm/d' /etc/hosts
+echo "127.0.1.1	${MASTER_HOSTNAME} ${MASTER_HOSTNAME}.local" >>/etc/hosts
+
+echo "** Set ${ADMIN_LOGIN_ACCOUNT} password to ${MASTER_PASSWORD} **"
+echo "${ADMIN_LOGIN_ACCOUNT}:${MASTER_PASSWORD}" | chpasswd
+chown -R octo:octo ${UMIKAZE_HOME}
 
 apt-get clean
 apt-get autoclean
