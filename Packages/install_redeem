@@ -76,7 +76,7 @@ chmod +x /usr/local/bin/redeem
 
 cat > /usr/local/bin/update-redeem <<EOF
 #!/bin/bash
-# This shim runs the version of redeem updater
+# This shim runs the version of the redeem updater
 # selected by the Select_A_Service configuration
 
 VENV=\`/usr/local/bin/environment_for redeem\`

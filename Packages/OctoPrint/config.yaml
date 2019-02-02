@@ -73,7 +73,7 @@ controls:
     children:
     - name: Set
       layout: vertical
-      commands: 
+      commands:
        - M906 X%(current_x)s
        - M909 X%(microstepping_x)s
       input:
@@ -93,7 +93,7 @@ controls:
           step: 1
     - name: Set
       layout: vertical
-      commands: 
+      commands:
        - M906 Y%(current_y)s
        - M909 Y%(microstepping_y)s
       input:
@@ -113,7 +113,7 @@ controls:
           step: 1
     - name: Set
       layout: vertical
-      commands: 
+      commands:
        - M906 Z%(current_z)s
        - M909 Z%(microstepping_z)s
       input:
@@ -133,7 +133,7 @@ controls:
           step: 1
     - name: Set
       layout: vertical
-      commands: 
+      commands:
        - M906 E%(current_e)s
        - M909 E%(microstepping_e)s
       input:
@@ -153,7 +153,7 @@ controls:
           step: 1
     - name: Set
       layout: vertical
-      commands: 
+      commands:
        - M906 H%(current_h)s
        - M909 H%(microstepping_h)s
       input:
@@ -176,7 +176,7 @@ controls:
     children:
     - name: Set
       layout: vertical
-      commands: 
+      commands:
        - M569 X%(direction_x)s
        - M92  X%(steps_pr_mm_x)s
       input:
@@ -192,7 +192,7 @@ controls:
           step: 2
     - name: Set
       layout: vertical
-      commands: 
+      commands:
        - M569 Y%(direction_y)s
        - M92  Y%(steps_pr_mm_y)s
       input:
@@ -208,7 +208,7 @@ controls:
           step: 2
     - name: Set
       layout: vertical
-      commands: 
+      commands:
        - M569 Z%(direction_z)s
        - M92  Z%(steps_pr_mm_z)s
       input:
@@ -224,7 +224,7 @@ controls:
           step: 2
     - name: Set
       layout: vertical
-      commands: 
+      commands:
        - M569 E%(direction_e)s
        - M92  E%(steps_pr_mm_e)s
       input:
@@ -240,7 +240,7 @@ controls:
           step: 2
     - name: Set
       layout: vertical
-      commands: 
+      commands:
        - M569 H%(direction_h)s
        - M92  H%(steps_pr_mm_h)s
       input:

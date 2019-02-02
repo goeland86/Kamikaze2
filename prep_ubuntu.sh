@@ -105,7 +105,7 @@ EOF
 }
 
 remove_unneeded_packages() {
-  echo "** Remove unneeded packages **"*
+  echo "** Remove unneeded packages **"
   rm -rf /etc/apache2/sites-enabled
   rm -rf /root/.c9
   rm -rf /usr/local/lib/node_modules

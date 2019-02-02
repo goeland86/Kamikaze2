@@ -6,7 +6,6 @@ for f in `ls Packages/version.d/*`
   do
     source $f
   done
-
 if [ -f "customize.sh" ] ; then
   source customize.sh
 fi

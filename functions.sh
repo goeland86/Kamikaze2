@@ -226,7 +226,7 @@ backup_umikaze_settings() {
 
       if [ -d $input_dir/home/octo/.octoprint ]; then
         echo "updating octoprint's name with the new Umikaze release name"
-        # use sed to modify the octoprint config.yaml to register the new Umikaze version    
+        # use sed to modify the octoprint config.yaml to register the new Umikaze version
         VERSION=`cat /etc/kamikaze-release | awk -F ' ' '{print $1 $2}'`
         sed -i "s/name: .*kaze.*/name: $VERSION/" $input_dir/home/octo/.octoprint/config.yaml
         echo "done"
