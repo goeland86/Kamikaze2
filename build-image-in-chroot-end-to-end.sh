@@ -2,7 +2,8 @@
 set -x
 set -e
 
-for f in `ls Packages/version.d/*`
+export VERSIONING=`pwd`/Packages/version.d
+for f in `ls ${VERSIONING}/*`
   do
     source $f
   done
