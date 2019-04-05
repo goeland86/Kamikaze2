@@ -33,7 +33,7 @@ echo "Device: $DEVICE"
 echo "Partition: $PARTITION"
 
 # This makes it so the image will boot on other BB not just the one it was built on
-echo "Removing UUID references and uncommenting flasher option from /boot/uEnv.txt"
+echo "Removing UUID references from /boot/uEnv.txt"
 MOUNTPOINT=$(mktemp -d /tmp/umikaze-sd.XXXXXX)
 mount $PARTITION ${MOUNTPOINT}
 sed -ie '/^uuid=/d' ${MOUNTPOINT}/boot/uEnv.txt
