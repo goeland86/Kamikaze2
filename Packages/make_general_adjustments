@@ -34,3 +34,6 @@ echo "KERNEL==\"uinput\", GROUP=\"wheel\", MODE:=\"0660\"" > /etc/udev/rules.d/8
 echo "SYSFS{idVendor}==\"0eef\", SYSFS{idProduct}==\"0001\", KERNEL==\"event*\",SYMLINK+=\"input/touchscreen_eGalaxy3\"" >> /etc/udev/rules.d/80-lcd-screen.rules
 date=$(date +"%d-%m-%Y")
 echo "$VERSION $date" > /etc/kamikaze-release
+
+# the files in /etc/sudoers.d/ must not be accessable to "others"
+chmod o-r /etc/sudoers.d/*
