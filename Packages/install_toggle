@@ -133,7 +133,7 @@ source ${TOGGLE_ENVIRONMENT}/bin/activate
 cd ${TOGGLE_ENVIRONMENT}/src/toggle
 git fetch
 git checkout $TOGGLE_BRANCH
-python setup.py clean install
+python setup.py clean develop
 
 #This is a hack for Umikaze 2.2.1 compatibility
 __TOGGLE_ENVIRONMENT=${TOGGLE_ENVIRONMENT}
