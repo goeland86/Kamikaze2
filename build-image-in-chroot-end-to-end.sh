@@ -9,6 +9,13 @@ for f in `ls ${VERSIONING}/*`
   done
 if [ -f "customize.sh" ] ; then
   source customize.sh
+else
+  before_running_in_chroot() {
+    :
+  }
+  after_running_in_chroot() {
+    :
+  }
 fi
 
 TARGETIMAGE=kamikaze-rootfs.img
@@ -59,15 +66,16 @@ cp -r `pwd`/!(*.img*) ${MOUNTPOINT}${UMIKAZE_HOME}
 shopt -u extglob
 shopt -u dotglob
 
-if [ -f "customize.sh" ]; then
-  add_custom_account
-  perform_minimal_reconfiguration
-fi
+before_running_in_chroot
 
 set +e # allow this to fail - we'll check the return code
 chroot ${MOUNTPOINT} /bin/su -c "cd ${UMIKAZE_HOME} && ./prep_ubuntu.sh && ./make-kamikaze.sh"
 status=$?
 set -e
+
+if [ $status -eq 0 ]; then
+    after_running_in_chroot
+fi
 
 rm ${MOUNTPOINT}/etc/resolv.conf
 umount ${MOUNTPOINT}/proc

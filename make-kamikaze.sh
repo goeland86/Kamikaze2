@@ -11,6 +11,13 @@ for f in `ls ${VERSIONING}/*`
   do
     source $f
   done
+if [ -f "customize.sh" ] ; then
+  source customize.sh
+else
+  add_custom_accounts() {
+    :
+  }
+fi
 
 echo "**Making ${VERSION}**"
 export LC_ALL=C
@@ -20,6 +27,7 @@ install_sgx
 setup_port_forwarding
 install_dependencies
 create_octoprint_user
+add_custom_accounts
 install_service_virtualization
 install_redeem
 install_octoprint
