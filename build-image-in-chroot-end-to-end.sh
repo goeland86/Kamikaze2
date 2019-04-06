@@ -47,6 +47,7 @@ EOF
 
 e2fsck -f ${DEVICE}p1
 resize2fs ${DEVICE}p1
+e2label ${DEVICE}p1 ${UMIKAZE_BRANCH}
 
 mount ${DEVICE}p1 ${MOUNTPOINT}
 mount -o bind /dev ${MOUNTPOINT}/dev
