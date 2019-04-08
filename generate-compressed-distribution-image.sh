@@ -136,4 +136,3 @@ echo
 
 # Talkie talkie
 echo "Image file generated as Umikaze-${UmikamiVersion}.img.xz"
-echo "USB drive and MicroSD card can be removed safely now."

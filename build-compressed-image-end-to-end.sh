@@ -30,9 +30,9 @@ fi
 rm -f $TARGETIMAGE
 xz -c -d $BASEIMAGE >> $TARGETIMAGE
 truncate -s 4G $TARGETIMAGE
-DEVICE=`losetup -P -f --show $TARGETIMAGE`
+VIRTUAL_DISK=`losetup -P -f --show $TARGETIMAGE`
 
-cat << EOF | fdisk ${DEVICE}
+cat << EOF | fdisk ${VIRTUAL_DISK}
 p
 d
 n
@@ -45,11 +45,11 @@ w
 
 EOF
 
-e2fsck -f ${DEVICE}p1
-resize2fs ${DEVICE}p1
-e2label ${DEVICE}p1 ${UMIKAZE_BRANCH}
+e2fsck -f ${VIRTUAL_DISK}p1
+resize2fs ${VIRTUAL_DISK}p1
+e2label ${VIRTUAL_DISK}p1 ${UMIKAZE_BRANCH}
 
-mount ${DEVICE}p1 ${MOUNTPOINT}
+mount ${VIRTUAL_DISK}p1 ${MOUNTPOINT}
 mount -o bind /dev ${MOUNTPOINT}/dev
 mount -o bind /sys ${MOUNTPOINT}/sys
 mount -o bind /proc ${MOUNTPOINT}/proc
@@ -87,12 +87,12 @@ rmdir ${MOUNTPOINT}
 
 if [ $status -eq 0 ]; then
     echo "Looks like the image was prepared successfully - packing it up"
-    ./update-u-boot.sh $DEVICE
-    ./generate-image-from-sd.sh $DEVICE
+    ./update-u-boot.sh $VIRTUAL_DISK
+    ./generate-compressed-distribution-image.sh $VIRTUAL_DISK
 else
     echo "image generation seems to have failed - cleaning up"
 fi
 
+losetup -d $VIRTUAL_DISK
 
-
-losetup -d $DEVICE
+exit $status
