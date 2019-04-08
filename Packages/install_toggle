@@ -76,10 +76,10 @@ fi
 
 # Register toggle in the Select_A_Service configuration
 cat >> /usr/local/etc/Select_A_Service.conf <<EOF
-[toggle]
-name=${TOGGLE_BRANCH}
-virtual_environment=Toggle-${TOGGLE_BRANCH}
-printer=None
+[[toggle]]
+name = ${TOGGLE_BRANCH}
+virtual_environment = Toggle-${TOGGLE_BRANCH}
+printer = None
 EOF
 
 cat > /usr/local/bin/toggle <<EOF

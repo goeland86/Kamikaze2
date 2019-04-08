@@ -59,10 +59,10 @@ echo "%octo ALL=NOPASSWD: /bin/systemctl restart redeem.service" >> /etc/sudoers
 
 # Register redeem in the Select_A_Service configuration
 cat >> /usr/local/etc/Select_A_Service.conf <<EOF
-[redeem]
-name=${REDEEM_BRANCH}
-virtual_environment=Redeem-${REDEEM_BRANCH}
-printer=None
+[[redeem]]
+name = ${REDEEM_BRANCH}
+virtual_environment = Redeem-${REDEEM_BRANCH}
+printer = None
 EOF
 
 cat > /usr/local/bin/redeem <<EOF

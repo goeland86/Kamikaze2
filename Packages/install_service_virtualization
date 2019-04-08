@@ -21,10 +21,10 @@ cat > /usr/local/bin/environment_for <<EOF
 # coding=utf-8
 
 BEGIN {
-  key=ARGV[1];
-  ARGV[1]="/usr/local/etc/Select_A_Service.conf";
+  key=ARGV[1]
+  ARGV[1]="/usr/local/etc/Select_A_Service.conf"
   desired_section_header = "[[]" key "]"
-  FS="=";
+  FS="="
   # Provide a default
   result = "."
 }
@@ -40,7 +40,9 @@ BEGIN {
 
 /virtual_environment/ {
   if(in_section) {
-    result = \$2;
+    # Remove leading whitespace
+    gsub(/^[ \t]+/,"",\$2)
+    result = \$2
   }
 }
 
@@ -56,5 +58,6 @@ cat > /usr/local/etc/Select_A_Service.conf <<EOF
 # for systemd services run under the
 # Select_A_Service protocol
 
-Configuration_File_Version="0.0.1"
+Configuration_File_Version="0.0.2"
+[Services]
 EOF
