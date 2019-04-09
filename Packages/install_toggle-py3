@@ -78,6 +78,11 @@ if [ ! -d ${TOGGLE_ENVIRONMENT}/src/toggle ]; then
   git clone --no-single-branch --depth 1 ${TOGGLE_REPOSITORY} ${TOGGLE_ENVIRONMENT}/src/toggle
 fi
 
+# We need a patched version of pyconnman
+if [ ! -d ${TOGGLE_ENVIRONMENT}/src/pyconnman ]; then
+  git clone https://github.com/liamw9534/pyconnman ${TOGGLE_ENVIRONMENT}/src/pyconnman
+fi
+
 # Register toggle in the Select_A_Service configuration
 cat >> /usr/local/etc/Select_A_Service.conf <<EOF
 [[toggle]]
@@ -158,6 +163,12 @@ chown -R octo:octo ${TOGGLE_ENVIRONMENT}/etc/toggle
 
 #Undo hack for Umikaze 2.2.1 compatibility
 TOGGLE_ENVIRONMENT=${__TOGGLE_ENVIRONMENT}
+
+# Install the patched version of pyconnman
+cd ${TOGGLE_ENVIRONMENT}/src/pyconnman/
+git fetch origin +refs/pull/4/head:refs/remotes/origin/python3
+git checkout python3
+python setup.py clean develop
 
 chown -R octo:octo ${TOGGLE_ENVIRONMENT}
 
