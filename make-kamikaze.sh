@@ -29,11 +29,13 @@ install_dependencies
 create_octoprint_user
 add_custom_accounts
 install_service_virtualization
-install_redeem
+install_redeem-py2
+# install_redeem-py3
 install_octoprint
 install_octoprint_redeem
 install_octoprint_toggle
-install_toggle
+install_toggle-py2
+# install_toggle-py3
 # install_cura
 # install_slic3r
 install_u-boot
