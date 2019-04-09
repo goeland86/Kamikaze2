@@ -142,7 +142,11 @@ TOGGLE_ENVIRONMENT=""
 # Make profiles uploadable via Octoprint
 mkdir -p ${TOGGLE_ENVIRONMENT}/etc/toggle
 cp configs/*.cfg ${TOGGLE_ENVIRONMENT}/etc/toggle/
-touch ${TOGGLE_ENVIRONMENT}/etc/toggle/local.cfg
+cat > ${TOGGLE_ENVIRONMENT}/etc/toggle/local.cfg <<EOF
+[OctoPrint]
+authentication = REPLACE_ME
+EOF
+
 cp models/probe-point.stl ${TOGGLE_ENVIRONMENT}/etc/toggle/
 cp -R style/ ${TOGGLE_ENVIRONMENT}/etc/toggle/style
 cp -R models/platforms/ ${TOGGLE_ENVIRONMENT}/etc/toggle/platforms
