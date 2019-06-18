@@ -10,7 +10,7 @@ upgrade_base_operating_system() {
   apt-get update
   # nuke GRUB so it doesn't prompt about config changes
   apt-get remove -y grub-efi-arm
-  apt-get upgrade -y
+  DEBIAN_FRONTEND=noninteractive apt-get  -y --force-yes -o Dpkg::Options::='--force-confdef' -o Dpkg::Options::='--force-confold' upgrade
   echo "Removing unwanted kernel packages"
 # apt-get -y remove linux-image-*
   apt-get -y remove linux-headers-*
