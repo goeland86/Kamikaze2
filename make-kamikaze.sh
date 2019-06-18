@@ -46,6 +46,7 @@ install_dummy_logging
 install_videostreamer
 install_ffmpeg
 rebrand_ssh
+prepare_revolve
 perform_cleanup
 install_flasher
 
