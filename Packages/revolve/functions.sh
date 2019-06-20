@@ -999,6 +999,11 @@ _copy_rootfs() {
   echo_broadcast "==> /boot/uEnv.txt: disabling eMMC flasher script"
   sed -i -e 's:'$emmcscript':#'$emmcscript':g' ${tmp_rootfs_dir}/boot/uEnv.txt
   generate_line 40 '*'
+  if [ "x${uEnv_file}" != "x" ] ; then
+    echo_broadcast "==> /boot/uEnv.txt: updating"
+    cp ${uEnv_file} ${tmp_rootfs_dir}/boot/
+    generate_line 40 '*'
+  fi
   cat ${tmp_rootfs_dir}/boot/uEnv.txt
   generate_line 40 '*'
   flush_cache

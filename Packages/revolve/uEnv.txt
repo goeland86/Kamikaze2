@@ -1,0 +1,20 @@
+#Docs: http://elinux.org/Beagleboard:U-boot_partitioning_layout_2.0
+uname_r=4.14.108-ti-r108
+#uuid=
+dtb=am335x-revolve.dtb
+
+###U-Boot Overlays###
+###Documentation: http://elinux.org/Beagleboard:BeagleBoneBlack_Debian#U-Boot_Overlays
+###Master Enable
+enable_uboot_overlays=1
+
+###PRUSS OPTIONS
+###pru_uio (4.4.x-ti, 4.14.x-ti & mainline/bone kernel)
+uboot_overlay_pru=/lib/firmware/AM335X-PRU-UIO-00A0.dtbo
+
+###
+###Cape Universal Enable
+enable_uboot_cape_universal=1
+
+cmdline=coherent_pool=1M net.ifnames=0 quiet root=/dev/mmcblk0p1 consoleblank=0 fbcon=rotate:1 omap_wdt.nowayout=0
+

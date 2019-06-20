@@ -14,13 +14,11 @@ cd Packages
 echo "** prepare_revolve **"
 set -x
 
-# Make dirs
-mkdir -p /opt/scipts/tools/
 
-# Copy files
+# Copy Device Tree Binary for revolve
 cp revolve/am335x-revolve.dtb /boot/dtbs/4.14.108-ti-r108/
-cp revolve/usb.sh /opt/scripts/tools/eMMC/
-cp revolve/functions.sh /opt/scripts/tools/eMMC/
+
+# Copy custom u-boot files
 cp revolve/MLO /opt/backup/uboot/MLO
 cp revolve/u-boot.img /opt/backup/uboot/u-boot.img
 

@@ -37,6 +37,8 @@ mkfs_options=""
 
 device_eeprom="bbbw-eeprom"
 
+uEnv_file="uEnv.txt"
+
 check_if_run_as_root
 
 startup_message
@@ -46,80 +48,5 @@ countdown 5
 check_eeprom
 check_running_system
 activate_cylon_leds
-
-#We override the copy_rootfs that comes from functions.sh as this one has wireless added to it
-_copy_rootfs() {
-  empty_line
-  generate_line 80 '='
-  echo_broadcast "Copying: Current rootfs to ${rootfs_partition}"
-  generate_line 40
-  echo_broadcast "==> rsync: / -> ${tmp_rootfs_dir}"
-  generate_line 40
-  get_rsync_options
-  rsync -aAx $rsync_options /* ${tmp_rootfs_dir} --exclude={/dev/*,/proc/*,/sys/*,/tmp/*,/run/*,/mnt/*,/media/*,/lost+found,/lib/modules/*,/uEnv.txt} || write_failure
-  flush_cache
-  generate_line 40
-  echo_broadcast "==> Copying: Kernel modules"
-  echo_broadcast "===> Creating directory for modules"
-  mkdir -p ${tmp_rootfs_dir}/lib/modules/$(uname -r)/ || true
-  echo_broadcast "===> rsync: /lib/modules/$(uname -r)/ -> ${tmp_rootfs_dir}/lib/modules/$(uname -r)/"
-  generate_line 40
-  rsync -aAx $rsync_options /lib/modules/$(uname -r)/* ${tmp_rootfs_dir}/lib/modules/$(uname -r)/ || write_failure
-  flush_cache
-  generate_line 40
-
-  echo_broadcast "Copying: Current rootfs to ${rootfs_partition} complete"
-  generate_line 80 '='
-  empty_line
-  generate_line 80 '='
-  echo_broadcast "Final System Tweaks:"
-  generate_line 40
-  if [ -d ${tmp_rootfs_dir}/etc/ssh/ ] ; then
-    echo_broadcast "==> Applying SSH Key Regeneration trick"
-    #ssh keys will now get regenerated on the next bootup
-    touch ${tmp_rootfs_dir}/etc/ssh/ssh.regenerate
-    flush_cache
-  fi
-
-  _generate_uEnv ${tmp_rootfs_dir}/boot/uEnv.txt
-
-  _generate_fstab
-
-  #FIXME: What about when you boot from a fat partition /boot ?
-  echo_broadcast "==> /boot/uEnv.txt: disabling eMMC flasher script"
-  sed -i -e 's:'$emmcscript':#'$emmcscript':g' ${tmp_rootfs_dir}/boot/uEnv.txt
-  generate_line 40 '*'
-  cat ${tmp_rootfs_dir}/boot/uEnv.txt
-  generate_line 40 '*'
-  flush_cache
-	echo_broadcast "==> running: chroot /tmp/rootfs/ /usr/bin/bb-wl18xx-wlan0"
-  echo_broadcast "==> bind some mount points"
-	mount --bind /proc /tmp/rootfs/proc
-	mount --bind /sys /tmp/rootfs/sys
-	mount --bind /dev /tmp/rootfs/dev
-	mount --bind /dev/pts /tmp/rootfs/dev/pts
-  echo_broadcast "==> Load module wl18xx"
-	modprobe wl18xx
-  generate_line 40
-	echo_broadcast "====> lsmod"
-	echo_broadcast "`lsmod`"
-  echo_broadcast "==> Chroot"
-  generate_line 40
-	chroot /tmp/rootfs/ /usr/bin/bb-wl18xx-wlan0
-  generate_line 40
-
-	flush_cache
-  echo_broadcast "==> initrd: $(ls -lh /tmp/rootfs/boot/initrd.img*)"
-  echo_broadcast "==> Unmount previous bind"
-	umount -fl /tmp/rootfs/dev/pts
-	umount -fl /tmp/rootfs/dev
-	umount -fl /tmp/rootfs/proc
-	umount -fl /tmp/rootfs/sys
-	sleep 2
-
-	flush_cache
-  generate_line 80
-}
-
 prepare_drive
 
