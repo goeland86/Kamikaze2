@@ -22,3 +22,15 @@ cd /usr/src/Umikaze/Packages/revolve/
 ./usb.sh
 ```
 
+
+Current issues for running on Revolve:
+ - Journalctl not working. Use
+ ```
+ tail /var/log/syslog
+ ```
+ - Redeem not starting.
+ ```
+ RuntimeError: Could not find PWM by device name pwm-heater-e
+ ```
+ - Switching to kernel 4.19 seems to solve the last issue.
+
