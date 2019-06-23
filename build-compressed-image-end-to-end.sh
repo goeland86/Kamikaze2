@@ -54,6 +54,11 @@ mount -o bind /dev ${MOUNTPOINT}/dev
 mount -o bind /sys ${MOUNTPOINT}/sys
 mount -o bind /proc ${MOUNTPOINT}/proc
 
+echo "Mounting /dev/ and /dev/pts in chroot... "
+mkdir -p -m 755 ${MOUNTPOINT}/dev/pts
+mount -t devpts -o gid=5,mode=620 devpts ${MOUNTPOINT}/dev/pts
+echo "OK"
+
 rm ${MOUNTPOINT}/etc/resolv.conf
 cp /etc/resolv.conf ${MOUNTPOINT}/etc/resolv.conf
 
