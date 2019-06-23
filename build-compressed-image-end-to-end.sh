@@ -86,6 +86,7 @@ fi
 rm ${MOUNTPOINT}/etc/resolv.conf
 umount ${MOUNTPOINT}/proc
 umount ${MOUNTPOINT}/sys
+umount ${MOUNTPOINT}/dev/pts
 umount ${MOUNTPOINT}/dev
 umount ${MOUNTPOINT}
 rmdir ${MOUNTPOINT}
