@@ -1,5 +1,5 @@
 # This specifies the appropriate version of Toggle
 TOGGLE_REPOSITORY="https://github.com/intelligent-agent/toggle"
-TOGGLE_BRANCH="1_3_x"
+TOGGLE_BRANCH="dev"
 TOGGLE_BRANCH_SINCE="2018-01-15"
 TOGGLE_ENVIRONMENT="/usr/local/Toggle-${TOGGLE_BRANCH}"

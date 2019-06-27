@@ -34,8 +34,8 @@ install_redeem-py2
 install_octoprint
 install_octoprint_redeem
 install_octoprint_toggle
-install_toggle-py2
-# install_toggle-py3
+# install_toggle-py2
+install_toggle-py3
 # install_cura
 # install_slic3r
 install_u-boot
