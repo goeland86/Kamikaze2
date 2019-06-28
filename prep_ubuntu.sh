@@ -10,9 +10,9 @@ upgrade_base_operating_system() {
   apt-get update
   # nuke GRUB so it doesn't prompt about config changes
   apt-get remove -y grub-efi-arm
-  DEBIAN_FRONTEND=noninteractive apt-get  -y --force-yes -o Dpkg::Options::='--force-confdef' -o Dpkg::Options::='--force-confold' upgrade
+  DEBIAN_FRONTEND=noninteractive apt-get  -y -o Dpkg::Options::='--force-confdef' -o Dpkg::Options::='--force-confold' upgrade
   echo "Removing unwanted kernel packages"
-# apt-get -y remove linux-image-*
+  apt-get -y purge linux-image-4.14.108-ti-r107 linux-image-5.1.8-armv7-x7 linux-image-4.19.31-ti-r19
   apt-get -y remove linux-headers-*
   apt-get -y autoremove
 # systemctl disable bb-wl18xx-wlan0
