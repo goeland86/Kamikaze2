@@ -16,7 +16,7 @@ set -x
 cd SGX
 apt-get install --no-install-recommends -y \
   ./sgx-libgbm.deb \
-  ./sgx-ti335x-userspace-1.14.3699939_1.1.deb
+  ./sgx-ti335x-userspace-1.17.4948957_1.1.deb
 
 cat > /etc/powervr.ini <<EOF
 [default]

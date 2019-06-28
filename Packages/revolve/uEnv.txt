@@ -1,5 +1,5 @@
 #Docs: http://elinux.org/Beagleboard:U-boot_partitioning_layout_2.0
-uname_r=4.19.31-ti-r19
+uname_r=4.19.50-ti-r20
 #uuid=
 dtb=am335x-revolve.dtb
 
