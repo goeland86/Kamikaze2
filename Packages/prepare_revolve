@@ -22,3 +22,8 @@ cp revolve/am335x-revolve.dtb /boot/dtbs/4.19.31-ti-r19
 cp revolve/MLO /opt/backup/uboot/MLO
 cp revolve/u-boot.img /opt/backup/uboot/u-boot.img
 
+# Upgrade to Ubuntu cosmic
+echo "Upgrading distro"
+sed -i 's\bionic\cosmic\' /etc/apt/sources.list
+apt update
+DEBIAN_FRONTEND=noninteractive apt-get  -y -o Dpkg::Options::='--force-confdef' -o Dpkg::Options::='--force-confold' dist-upgrade
