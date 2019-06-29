@@ -15,6 +15,24 @@ upgrade_base_operating_system() {
   apt-get -y purge linux-image-4.14.108-ti-r107 linux-image-5.1.8-armv7-x7 linux-image-4.19.31-ti-r19
   apt-get -y remove linux-headers-*
   apt-get -y autoremove
+
+  systemctl disable nginx
+  systemctl disable nmbd
+  systemctl disable smbd
+  #systemctl disable connman
+  systemctl disable ofono
+  apt purge -y nginx ofono
+
+
+  # Install packages only in bionic
+  apt-get install --no-install-recommends -y  ti-pru-cgt-installer
+
+  # Upgrade to Ubuntu cosmic
+  echo "Upgrading distro from bionic to cosmic"
+  sed -i 's\bionic\cosmic\' /etc/apt/sources.list
+  apt update
+  DEBIAN_FRONTEND=noninteractive apt-get  -y -o Dpkg::Options::='--force-confdef' -o Dpkg::Options::='--force-confold' dist-upgrade
+
 # systemctl disable bb-wl18xx-wlan0
   echo "Updating uboot..."
   sed -i 's\uboot_overlay_pru=/lib/firmware/AM335X-PRU-RPROC\#uboot_overlay_pru=/lib/firmware/AM335X-PRU-RPROC\' /boot/uEnv.txt
