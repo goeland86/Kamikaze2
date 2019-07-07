@@ -46,7 +46,7 @@ echo
 
 # Likely not needed but for the sake of making the image smaller we defrag first
 echo "Defragmenting partition."
-e4defrag ${MOUNTPOINT} > /dev/null
+e4defrag -c ${MOUNTPOINT} > /dev/null
 umount ${MOUNTPOINT}
 echo
 
@@ -61,7 +61,7 @@ echo
 # Zero out the free space remaining on the file system
 echo "Defrag and zero partition free space."
 mount $PARTITION ${MOUNTPOINT}
-e4defrag ${MOUNTPOINT} > /dev/null
+e4defrag -c ${MOUNTPOINT} > /dev/null
 dd if=/dev/zero of=${MOUNTPOINT}/zero_fill || true
 rm -rf ${MOUNTPOINT}/zero_fill
 umount ${MOUNTPOINT}
@@ -113,7 +113,7 @@ echo
 echo "Final defrag and zeroing partition free space."
 mount $PARTITION ${MOUNTPOINT}
 UmikamiVersion=$(cat ${MOUNTPOINT}/etc/dogtag | awk '{printf $2}')
-e4defrag ${MOUNTPOINT} > /dev/null
+e4defrag -c ${MOUNTPOINT} > /dev/null
 # ignore the failure on this line - it runs until it's out of space
 dd if=/dev/zero of=${MOUNTPOINT}/zero_fill || true
 rm -rf ${MOUNTPOINT}/zero_fill
