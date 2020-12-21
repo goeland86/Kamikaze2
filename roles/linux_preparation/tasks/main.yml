@@ -8,14 +8,14 @@
     - /etc/issue
 
 - name: Register ReFactor version
-  script: 
+  script:
     cmd: '{{ role_path }}/files/get_refactor_version.sh'
   register: version
-    
+
 - name: upgrade packages
   apt:
     upgrade: dist
-    
+
 - name: remove unneeded packages
   apt:
     pkg:
@@ -35,7 +35,7 @@
 
 - name: install debconf-utils and curl
   apt:
-    pkg: 
+    pkg:
       - debconf-utils
       - curl
       - firmware-realtek
@@ -72,7 +72,7 @@
     path: /etc/ssh/sshd_config
     line: 'PermitRootLogin yes'
     state: present
-      
+
 - name: remove unneeded files
   file:
     path: "{{ item }}"
@@ -136,14 +136,12 @@
    - /etc/issue.net
 
 - name: write issue and issue.net
-  blockinfile:
-    path: '{{ item }}'
-    state: present
-    block: |
+  copy:
+    dest: '{{ item }}'
+    content: |
       {{ version.stdout }}
 
       Check that nothing is printing before any intensive operation!
-      
   with_items:
     - /etc/issue.net
     - /etc/issue
