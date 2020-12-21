@@ -109,6 +109,7 @@
     mode: '0755'
     owner: debian
     group: debian
+  when: platform == 'recore'
 
 - name: Recore - Install ar100 binary
   copy:
@@ -116,6 +117,7 @@
     dest: /home/debian/klipper/out/ar100.bin
     owner: debian
     group: debian
+  when: platform == 'recore'
 
 - name: Pi/Pi64 - install Klipper with install scripts
   shell: "export USER=debian; {{ klipper_home }}/scripts/install-octopi.sh"
