@@ -39,7 +39,7 @@
 # iptables -t nat -A PREROUTING -p tcp --dport $srcPortNumber -j REDIRECT --to-port $dstPortNumber
 - name: create iptables port forward with iptables-legacy
   shell:
-    cmd: iptables -t nat -A PREROUTING -p tcp --dport 80 -j REDIRECT --to-port 5000
+    cmd: iptables-legacy -t nat -A PREROUTING -p tcp --dport 80 -j REDIRECT --to-port 5000
 
 - name: create home octoprint folder
   file:
