@@ -122,10 +122,12 @@
 - name: force user to change debian password on first login
   shell:
     cmd: "chage -d 0 debian"
+  when: platform != 'recore'
 
 - name: force user to change root password on first login
   shell:
     cmd: "chage -d 0 root"
+  when: platform != 'recore'
 
 - name: create issue and issue.net file
   file:
