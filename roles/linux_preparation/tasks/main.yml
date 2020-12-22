@@ -177,25 +177,21 @@
     name: network-manager
     state: latest
 
-- name: Recore - fetch dts device tree
+- name: Recore - fetch dtb and dts device trees
   when: platform == 'recore'
   get_url:
     url: "https://github.com/intelligent-agent/Recore/raw/master/Device_tree/{{ item }}"
     dest: "/boot/dtb/allwinner/{{ item }}"
   with_items:
+    - sun50i-a64-recore-A2.dtb
+    - sun50i-a64-recore-A2.dts
     - sun50i-a64-recore-A3.dtb
+    - sun50i-a64-recore-A3.dts
+    - sun50i-a64-recore-A4.dtb
+    - sun50i-a64-recore-A4.dts
 
-- name: Recore - rename dts device tree file
+- name: Recore - rename dtb device tree file
   copy:
-    src: /boot/dtb/allwinner/sun50i-a64-recore-A3.dtb
+    src: /boot/dtb/allwinner/sun50i-a64-recore-A4.dtb
     dest: /boot/dtb/allwinner/sun50i-a64-recore.dtb
   when: platform == 'recore'
-
-- name: cleanup
-  when: platform == 'recore'
-  file:
-    path: "/boot/dtb/allwinner/sun50i-a64-recore-A3.{{ item }}"
-    state: absent
-  with_items:
-    - dtb
-    - dts
