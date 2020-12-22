@@ -195,3 +195,4 @@
     src: /boot/dtb/allwinner/sun50i-a64-recore-A4.dtb
     dest: /boot/dtb/allwinner/sun50i-a64-recore.dtb
   when: platform == 'recore'
+  
