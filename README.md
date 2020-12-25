@@ -4,7 +4,7 @@ Simplified Thing-Printer board image generation toolset, based on Debian or Ubun
 The starting point for ReFactor is the Ubuntu console image, details are in the wiki here:
 http://wiki.thing-printer.com/index.php?title=ReFactor
 
-ReFactor is a build-tool to install a printer's Firmware (at the moment Klipper), a printer control interface (OctoPrint or DWC), a touch-screen interface (Toggle w/ OctoPrint, DWC's tbd) and a few miscellaneous items (webcam streamer, network file share for gcode file uploads, etc.). 
+ReFactor is a build-tool to install a printer's Firmware (at the moment Klipper), a printer control interface (OctoPrint or DWC), a touch-screen interface (Toggle w/ OctoPrint, DWC's tbd) and a few miscellaneous items (webcam streamer, network file share for gcode file uploads, etc.).
 
 It sets a default password for access as root on new images (**root:kamikaze**), but leaves the root account alone otherwise.
 SSH is meant to be active and allow root login. The `debian` user is normally also setup and runs OctoPrint and Klipper. Its password is set to `temppwd`. Both root and debian passwords will need to be changed upon first login.
@@ -16,7 +16,7 @@ The images generated are focused on being a boot-strapped firmware for Thing-Pri
 cd <path to Refactor git clone>
 sudo ./build-image-in-chroot-end-to-end.sh <platform> [OPTIONAL: system setup script]
 ```
-If not specified, the _ansible-playbook_ that is used is ___SYSTEM_klipper_octoprint-DEFAULT.yml___
+If not specified, the _ansible-playbook_ that is used is ___playbooks/SYSTEM_klipper_octoprint-DEFAULT.yml___
 
 The platform (required parameter) is one of:
  * replicape
@@ -44,7 +44,7 @@ In case you need help building an image to test your changes and do not have a b
 Umikaze 2.1.1 was built on Ubuntu 18.04.1 (LTS) and incorporated OctoPrint, Redeem and Toggle.
 To learn more about Umikaze, go to https://github.com/intelligent-agent/Umikaze/wiki
 
-The starting point for Kamikaze 2.0.0 is the Debian IoT image found here: 
+The starting point for Kamikaze 2.0.0 is the Debian IoT image found here:
 https://debian.beagleboard.org/images/
 
 For Kamikaze 1.0:  
@@ -62,9 +62,9 @@ Here is how to recreate for Kamikaze 2.0:
     ./make-kamikaze-2.0.0.sh  
 
 
-The update command will kick the user out from the ssh session. 
+The update command will kick the user out from the ssh session.
 
-# Changelog: 
+# Changelog:
 2.2.0 - *** Work In Progress ***
 
 
@@ -76,6 +76,6 @@ The update command will kick the user out from the ssh session.
 
 1.1.1 - chown octo:octo on /etc/redeem and /etc/toggle
 
-1.1.0 - Install latest Redeem, Toggle and OctoPrint from repositories. 
+1.1.0 - Install latest Redeem, Toggle and OctoPrint from repositories.
 
 

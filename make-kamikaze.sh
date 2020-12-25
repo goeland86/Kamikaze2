@@ -5,6 +5,6 @@ set -e
 exec >  >(tee -ia /root/make-kamikaze.log)
 exec 2> >(tee -ia /root/make-kamikaze.log >&2)
 
-ansible-playbook system_klipper_octoprint-DEFAULT.yml
+ansible-playbook playbooks/system_klipper_octoprint-DEFAULT.yml
 
 echo "Now reboot!"

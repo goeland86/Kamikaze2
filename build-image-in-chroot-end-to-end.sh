@@ -10,7 +10,7 @@ fi
 if [ "$#" -eq 2 ]; then
 	SYSTEM_ANSIBLE=$2
 else
-	SYSTEM_ANSIBLE=SYSTEM_klipper_octoprint-DEFAULT.yml
+	SYSTEM_ANSIBLE=playbooks/SYSTEM_klipper_octoprint-DEFAULT.yml
 fi
 
 if [ ! -f ${SYSTEM_ANSIBLE} ]; then
