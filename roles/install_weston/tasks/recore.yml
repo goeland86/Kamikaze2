@@ -1,0 +1,47 @@
+---
+- name: install weston
+  tags: weston
+  apt:
+    pkg:
+      - weston
+
+- name: make weston ini directory
+  tags: weston
+  file:
+    path: /etc/xdg/weston
+    state: directory
+    mode: '0755'
+
+- name: make weston ini file
+  tags: weston
+  copy:
+    dest: /etc/xdg/weston/weston.ini
+    content: |
+      [core]
+      idle-time=0
+
+      [shell]
+      locking=false
+
+      [output]
+      name=HDMI-A-1
+      transform=90
+
+- name: make weston service file
+  tags: weston
+  copy:
+    dest: /etc/systemd/system/weston.service
+    content: |
+      [Unit]
+      Description=Weston Wayland Compositor
+      After=user@0.service
+      Requires=user@0.service
+
+      [Service]
+      Environment="XDG_RUNTIME_DIR=/run/user/0"
+      ExecStart=/usr/bin/weston --tty 2
+
+      [Install]
+      WantedBy=multi-user.target
+
+

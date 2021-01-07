@@ -1,0 +1,4 @@
+---
+- name: Recore - Install Weston
+  include: recore.yml
+  when: platform == 'recore'
