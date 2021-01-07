@@ -1,12 +1,4 @@
 ---
-- name: remove login info
-  file:
-    path: "{{ item }}"
-    state: absent
-  with_items:
-    - /etc/issue.net
-    - /etc/issue
-
 - name: Register ReFactor version
   script:
     cmd: '{{ role_path }}/files/get_refactor_version.sh'
@@ -94,16 +86,6 @@
     state: present
     path: '/etc/{{ dogtag }}'
 
-- name: remove hostname
-  file:
-    path: /etc/hostname
-    state: absent
-
-- name: create hostname
-  file:
-    path: /etc/hostname
-    state: touch
-
 - name: set hostname
   lineinfile:
     path: /etc/hostname
@@ -136,30 +118,6 @@
   service:
     name: ssh
     enabled: yes
-
-- name: remove connman
-  apt:
-    name: connman
-    state: absent
-
-- name: create resolv.conf
-  file:
-    path: /etc/resolv.conf
-    state: touch
-    mode: 0644
-    owner: root
-    group: root
-
-- name: reset the resolv.conf file
-  lineinfile:
-    path: /etc/resolv.conf
-    line: nameserver 1.1.1.1
-    state: present
-
-- name: install NetworkManager
-  apt:
-    name: network-manager
-    state: latest
 
 - name: Recore - fetch dtb and dts device trees
   get_url:
