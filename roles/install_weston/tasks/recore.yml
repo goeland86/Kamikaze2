@@ -44,4 +44,9 @@
       [Install]
       WantedBy=multi-user.target
 
+- name: Enable service weston
+  tags: weston
+  service:
+    name: weston
+    enabled: yes
 
