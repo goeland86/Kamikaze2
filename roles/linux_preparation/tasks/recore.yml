@@ -1,35 +1,11 @@
 ---
-- name: Register ReFactor version
-  script:
-    cmd: '{{ role_path }}/files/get_refactor_version.sh'
-  register: version
+- name: update package list
+  apt:
+    update_cache: yes
 
 - name: upgrade packages
   apt:
     upgrade: dist
-
-- name: remove unneeded packages
-  apt:
-    pkg:
-    - nginx
-    - hostapd
-    - libgtk3-common
-    - grub
-    - javascript-common
-    state: absent
-    autoremove: yes
-
-- name: install debconf-utils and curl
-  apt:
-    pkg:
-      - debconf-utils
-      - curl
-      - firmware-realtek
-    state: present
-
-- name: update package list
-  apt:
-    update_cache: yes
 
 - name: install packages
   apt:
@@ -44,14 +20,19 @@
     - libnss-mdns
     - byobu
     - htop
-    - unzip
     - cpufrequtils
     - pkg-config
     - python3-dev
     - pkg-config
+    - firmware-realtek
     state: present
     autoremove: yes
     autoclean: yes
+
+- name: enable ssh
+  service:
+    name: ssh
+    enabled: yes
 
 - name: enable root login via ssh
   lineinfile:
@@ -59,26 +40,14 @@
     line: 'PermitRootLogin yes'
     state: present
 
-- name: remove unneeded files
-  file:
-    path: "{{ item }}"
-    state: absent
-  with_items:
-    - /etc/apache2/
-    - /root/.c9
-    - /usr/lib/node_modules
-    - /usr/local/lib/node_modules
-    - /var/lib/cloud9
-    - /var/cache/doc*
-
-- name: create dogtag
-  file:
-    path: '/etc/{{ dogtag }}'
-    state: touch
-
 - name: get date
   command: 'date --iso-8601'
   register: build_date
+
+- name: Register ReFactor version
+  script:
+    cmd: '{{ role_path }}/files/get_refactor_version.sh'
+  register: version
 
 - name: write dogtag
   lineinfile:
@@ -95,14 +64,6 @@
   shell:
     cmd: "echo 'root:kamikaze' | chpasswd"
 
-- name: create issue and issue.net file
-  file:
-    path: '{{ item }}'
-    state: touch
-  with_items:
-   - /etc/issue
-   - /etc/issue.net
-
 - name: write issue and issue.net
   copy:
     dest: '{{ item }}'
@@ -113,11 +74,6 @@
   with_items:
     - /etc/issue.net
     - /etc/issue
-
-- name: enable ssh
-  service:
-    name: ssh
-    enabled: yes
 
 - name: Recore - fetch dtb and dts device trees
   get_url:
