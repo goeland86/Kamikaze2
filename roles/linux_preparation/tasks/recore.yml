@@ -50,10 +50,9 @@
   register: version
 
 - name: write dogtag
-  lineinfile:
-    line: '{{ version.stdout }} {{ build_date.stdout }}'
-    state: present
-    path: '/etc/{{ dogtag }}'
+  copy:
+    dest: '/etc/{{ dogtag }}'
+    content: '{{ version.stdout }} {{ build_date.stdout }}'    
 
 - name: set hostname
   lineinfile:
