@@ -1,6 +1,7 @@
 ---
 - name: copy the resolv.conf file
   shell: cp /etc/resolv.conf /etc/resolv.conf.bak
+  when: platform != 'recore'
 
 - name: remove nginx / apache / iptables
   apt:
@@ -9,10 +10,12 @@
       - apache2
       - iptables
     state: absent
+  when: platform != 'recore'
 
 - name: reinstall resolv.conf
   shell: mv /etc/resolv.conf.bak /etc/resolv.conf
-
+  when: platform != 'recore'
+  
 - name: Install python3.7
   apt:
     name:
