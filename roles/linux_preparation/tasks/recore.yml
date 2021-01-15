@@ -52,12 +52,12 @@
 - name: write dogtag
   copy:
     dest: '/etc/{{ dogtag }}'
-    content: '{{ version.stdout }} {{ build_date.stdout }}'    
+    content: '{{ version.stdout }} {{ build_date.stdout }}'
 
 - name: set hostname
-  lineinfile:
-    path: /etc/hostname
-    line: '{{ platform }}'
+  copy:
+    dest: /etc/hostname
+    content: '{{ platform }}\n'
 
 - name: set root password
   shell:
