@@ -136,7 +136,7 @@ echo "Generating image file now."
 blocksize=$(fdisk -l $DEVICE | grep Units: | awk '{printf $8}')
 count=$(fdisk -l -o Device,End $DEVICE | grep $PARTITION | awk '{printf $2}')
 ddcount=$((count*blocksize/1000000+1))
-dd if=$DEVICE bs=1MB count=${ddcount} | xz -T 0 > Refactor-${TARGET_PLATFORM}-"${ImageVersion}".img.xz
+dd if=$DEVICE bs=1MB count=${ddcount} | xz -vc -0 -T 0 > Refactor-${TARGET_PLATFORM}-"${ImageVersion}".img.xz
 echo
 
 # Talkie talkie
