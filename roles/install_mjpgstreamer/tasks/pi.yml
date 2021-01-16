@@ -1,0 +1,46 @@
+---
+- name: install dependencies
+  apt:
+    pkg:
+      - cmake
+      - libjpeg-dev
+      - ffmpeg
+    state: latest
+
+- name: clone git repo
+  git:
+    repo: https://github.com/xeno14/mjpg-streamer
+    dest: /usr/src/mjpg-streamer
+
+- name: compile mjpg-streamer
+  shell: make && make install
+  args:
+    chdir: /usr/src/mjpg-streamer/mjpg-streamer-experimental/
+    creates: /usr/bin/mjpg_streamer
+
+- name: add video udev rule file
+  file:
+    path: /etc/udev/rules.d/50-video.rules
+    state: touch
+
+- name: Replicape: add video udev rules
+  lineinfile:
+    path: /etc/udev/rules.d/50-video.rules
+    line: 'KERNEL=="video0", TAG+="systemd"'
+    state: present
+
+- name: add debian sudo permission to restart the service
+  lineinfile:
+    path: /etc/sudoers.d/debian
+    line: '%debian ALL=NOPASSWD: /bin/systemctl restart mjpg.service'
+    state: present
+
+- name: deploy service file
+  copy:
+    src: '{{ role_path }}/files/mjpg.service'
+    dest: /etc/systemd/system/mjpg.service
+
+- name: enable the video streaming service
+  service:
+    name: mjpg.service
+    enabled: yes

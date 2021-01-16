@@ -1,0 +1,10 @@
+[Unit]
+Description=Mjpg streamer
+Wants=dev-video1.device
+After=dev-video1.device
+
+[Service]
+ExecStart=/usr/local/bin/mjpg_streamer -i "/usr/local/lib/mjpg-streamer/input_uvc.so -d /dev/video1" -o "/usr/local/lib/mjpg-streamer/output_http.so"
+
+[Install]
+WantedBy=basic.target

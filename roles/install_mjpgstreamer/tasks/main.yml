@@ -1,53 +1,16 @@
 ---
-- name: install dependencies
-  apt:
-    pkg:
-      - cmake
-      - libjpeg-dev
-      - ffmpeg
-    state: latest
+- name: Replicape - Install Mjpg
+  include: replicape.yml
+  when: platform == 'replicape'
 
-- name: clone git repo
-  git:
-    repo: https://github.com/xeno14/mjpg-streamer
-    dest: /usr/src/mjpg-streamer
+- name: Recore - Install Mjpg
+  include: recore.yml
+  when: platform == 'recore'
 
-- name: remove raspicam from camera list
-  lineinfile:
-    path: /usr/src/mjpg-streamer/mjpg-streamer-experimental/CMakeLists.txt
-    regex: input_raspicam
-    line: '#add_subdirectory(plugins/input_raspicam)'
-  when: (platform != 'pi' and 'platform' != 'pi64')
+- name: Pi - Install Mjpg
+  include: pi.yml
+  when: platform == 'pi'
 
-- name: compile mjpg-streamer
-  shell: make && make install
-  args:
-    chdir: /usr/src/mjpg-streamer/mjpg-streamer-experimental/
-    creates: /usr/bin/mjpg_streamer
-
-- name: add video udev rule file
-  file:
-    path: /etc/udev/rules.d/50-video.rules
-    state: touch
-
-- name: add video udev rules
-  lineinfile:
-    path: /etc/udev/rules.d/50-video.rules
-    line: 'KERNEL=="video0", TAG+="systemd"'
-    state: present
-
-- name: add debian sudo permission to restart the service
-  lineinfile:
-    path: /etc/sudoers.d/debian
-    line: '%debian ALL=NOPASSWD: /bin/systemctl restart mjpg.service'
-    state: present
-
-- name: deploy service file
-  copy:
-    src: '{{ role_path }}/files/mjpg.service'
-    dest: /lib/systemd/system/mjpg.service
-
-- name: enable the video streaming service
-  service:
-    name: mjpg.service
-    enabled: yes
+- name: Pi64 - Install Mjpg
+  include: pi.yml
+  when: platform == 'pi64'
