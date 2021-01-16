@@ -6,7 +6,7 @@ After=weston.service
 Environment="XDG_RUNTIME_DIR=/run/user/0"
 Environment=MX_RC_FILE=/etc/toggle/styles/Plain/style.css
 Environment=CLUTTER_BACKEND=wayland
-ExecStart=/usr/bin/toggle
+ExecStart=/usr/local/bin/toggle
 
 [Install]
 WantedBy=multi-user.target

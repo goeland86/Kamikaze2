@@ -70,5 +70,4 @@
     group: debian
 
 - name: enable the toggle service
-  tags: toggle
   shell: systemctl enable toggle
