@@ -1,11 +1,11 @@
 ---
 - name: Add specified repository into sources list
-  ansible.builtin.apt_repository:
-    repo: deb http://feeds.iagent.no/debian buster main
+  apt_repository:
+    repo: deb [arch=arm64] http://feeds.iagent.no/debian buster main
     state: present
 
 - name: add iagent feeds
-  ansible.builtin.apt_key:
+  apt_key:
     url: http://feeds.iagent.no/debian/iagent.public.key
     state: present
 
@@ -27,7 +27,7 @@
       - python3-networkmanager
       - python3-tornado
       - python3-requests
-      - gir1.2-mx
+      - gir1.2-mx-2.0-0
       - gir1.2-mash-0.3-0
     state: present
     force: yes
@@ -42,46 +42,34 @@
 - name: copy toggle service file
   copy:
     src: '{{ role_path }}/files/toggle_recore.service'
-    dest: /lib/systemd/system/toggle.service
+    dest: /etc/systemd/system/toggle.service
 
-- name: grant sudo to octo user for restarting toggle service
+- name: grant sudo to debian user for restarting toggle service
   lineinfile:
-    path: /etc/sudoers.d/octo
-    line: '%octo ALL=NOPASSWD: /bin/systemctl restart toggle.service'
+    path: /etc/sudoers.d/debian
+    line: '%debian ALL=NOPASSWD: /bin/systemctl restart toggle.service'
     state: present
 
-- name: install toggle in venv
+- name: Use pip to install toggle in venv
+  pip:
+    chdir: '{{ toggle_home }}/src/toggle/'
+    requirements: '{{ toggle_home }}/src/toggle/requirements.txt'
+    virtualenv: '{{ toggle_home }}/venv'
+    virtualenv_python: python3.7
+    extra_args: "-e ."
+
+- name: Use pip to install toggle data files
   shell:
-    cmd: 'cd {{ toggle_home }}/src/toggle ; {{ toggle_home }}/bin/pip install -e . -r requirements.txt ; {{ toggle_home }}/bin/python setup.py clean install'
+    chdir: "{{ toggle_home }}/src/toggle/"
+    cmd: "{{ toggle_home }}/venv/bin/python3 setup.py install_data"
 
 - name: touch the local.cfg file
   file:
     path: /etc/toggle/local.cfg
     state: touch
-    owner: octo
-    group: octo
+    owner: debian
+    group: debian
 
 - name: enable the toggle service
-  service:
-    name: toggle
-    enabled: yes
-
-- name: clone octoprint toggle plugin from git
-  git:
-    repo: https://github.com/intelligent-agent/octoprint_toggle
-    dest: /usr/src/octoprint_toggle
-
-- name: install octoprint toggle plugin in virtualenv
-  shell:
-    cmd: 'cd /usr/src/octoprint_toggle; {{ octoprint_home }}/venv/bin/python setup.py clean install'
-
-- name: install sudoers entry for toggle restart
-  lineinfile:
-    path: /etc/sudoers.d/octo
-    line: '%octo ALL=NOPASSWD: /usr/bin/make -C /usr/src/toggle install'
-    state: present
-
-- name: enable toggle service
-  service:
-    name: toggle
-    enabled: yes
+  tags: toggle
+  shell: systemctl enable toggle

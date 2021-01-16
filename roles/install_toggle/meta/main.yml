@@ -1,4 +1,4 @@
 ---
 dependencies:
-  - { role: install_octoprint }
-  - { role: install_framebuffer }
+  - { role: install_octoprint, when: platform != 'recore' }
+  - { role: install_framebuffer, when: platform != 'recore' }
