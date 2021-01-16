@@ -8,7 +8,7 @@
   when: platform == 'recore'
 
 - name: Pi - Install Toggle
-  include pi.yml
+  include: pi.yml
   when: platform == 'pi'
 
 - name: Pi64
