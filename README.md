@@ -4,7 +4,7 @@ Simplified Thing-Printer board image generation toolset, based on Debian or Ubun
 The starting point for ReFactor is the Ubuntu console image, details are in the wiki here:
 http://wiki.thing-printer.com/index.php?title=ReFactor
 
-ReFactor is a build-tool to install a printer's Firmware (at the moment Klipper), a printer control interface (OctoPrint or DWC), a touch-screen interface (Toggle w/ OctoPrint, DWC's tbd) and a few miscellaneous items (webcam streamer, network file share for gcode file uploads, etc.). 
+ReFactor is a build-tool to install a printer's Firmware (at the moment Klipper), a printer control interface (OctoPrint or DWC), a touch-screen interface (Toggle w/ OctoPrint, DWC's tbd) and a few miscellaneous items (webcam streamer, network file share for gcode file uploads, etc.).
 
 It sets a default password for access as root on new images (**root:kamikaze**), but leaves the root account alone otherwise.
 SSH is meant to be active and allow root login. The `debian` user is normally also setup and runs OctoPrint and Klipper. Its password is set to `temppwd`. Both root and debian passwords will need to be changed upon first login.
@@ -31,6 +31,9 @@ The script then exports the `platform` ansible variable, and sources the `BaseLi
 
 **IMPORTANT NOTE**: Only the `SYSTEM-[...].yml` playbook files can work with the `build-image-in-chroot-end-to-end.sh` script. The `INSTALL-[...].yml` playbooks are provided as means for end-users to customize their running images. It is inadvisable to run a `SYSTEM-[...].yml` playbook on an already running system. And especially not during a print. That would cause a division by zero and make the printer disappear into its own micro black hole. Or release the magic smoke. Either way, not a good thing. You have been warned.
 
+### Example of running a task locally 
+`ansible-playbook -k INSTALL-toggle.yml --extra-vars '{"platform":"recore", "packaging":"apt"}'`
+
 # Contributing
 
 Any contribution you make should be in the form of a PR aimed at the `dev` branch of `intelligent-agent/Umikaze`. The `dev` branch will lead to the generation of a beta or release-candidate image for the community to test, and can be delayed for merge to `master` in case multiple changes arrive in a similar time frame, to release a new image with all new features combined.
@@ -52,7 +55,7 @@ This Jenkins server is running on a pi 4, which means its capacity is limited to
 Umikaze 2.1.1 was built on Ubuntu 18.04.1 (LTS) and incorporated OctoPrint, Redeem and Toggle.
 To learn more about Umikaze, go to https://github.com/intelligent-agent/Umikaze/wiki
 
-The starting point for Kamikaze 2.0.0 is the Debian IoT image found here: 
+The starting point for Kamikaze 2.0.0 is the Debian IoT image found here:
 https://debian.beagleboard.org/images/
 
 For Kamikaze 1.0:  
@@ -70,9 +73,9 @@ Here is how to recreate for Kamikaze 2.0:
     ./make-kamikaze-2.0.0.sh  
 
 
-The update command will kick the user out from the ssh session. 
+The update command will kick the user out from the ssh session.
 
-# Changelog: 
+# Changelog:
 2.2.0 - *** Work In Progress ***
 
 
@@ -84,6 +87,6 @@ The update command will kick the user out from the ssh session.
 
 1.1.1 - chown octo:octo on /etc/redeem and /etc/toggle
 
-1.1.0 - Install latest Redeem, Toggle and OctoPrint from repositories. 
+1.1.0 - Install latest Redeem, Toggle and OctoPrint from repositories.
 
 

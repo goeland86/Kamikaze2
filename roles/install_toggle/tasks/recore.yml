@@ -35,7 +35,7 @@
 - name: clone toggle from git
   git:
     repo: https://github.com/intelligent-agent/toggle
-    dest: '{{ toggle_home }}/src/toggle'
+    dest: '{{ toggle_home }}'
     version: dev
     depth: 1
 
@@ -52,16 +52,15 @@
 
 - name: Use pip to install toggle in venv
   pip:
-    chdir: '{{ toggle_home }}/src/toggle/'
-    requirements: '{{ toggle_home }}/src/toggle/requirements.txt'
-    virtualenv: '{{ toggle_home }}/venv'
-    virtualenv_python: python3.7
+    chdir: '{{ toggle_home }}'
+    requirements: '{{ toggle_home }}/requirements.txt'
     extra_args: "-e ."
+    executable: pip3
 
 - name: Use pip to install toggle data files
   shell:
-    chdir: "{{ toggle_home }}/src/toggle/"
-    cmd: "{{ toggle_home }}/venv/bin/python3 setup.py install_data"
+    chdir: "{{ toggle_home }}"
+    cmd: "python3 setup.py install_data"
 
 - name: touch the local.cfg file
   file:
