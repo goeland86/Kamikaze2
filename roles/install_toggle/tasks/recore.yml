@@ -1,12 +1,12 @@
 ---
-- name: Add specified repository into sources list
-  apt_repository:
-    repo: deb [arch=arm64] http://feeds.iagent.no/debian buster main
-    state: present
-
 - name: add iagent feeds
   apt_key:
     url: http://feeds.iagent.no/debian/iagent.public.key
+    state: present
+
+- name: Add specified repository into sources list
+  apt_repository:
+    repo: deb [arch=arm64] http://feeds.iagent.no/debian buster main
     state: present
 
 - name: update package list
