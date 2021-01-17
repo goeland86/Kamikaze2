@@ -62,12 +62,23 @@
     chdir: "{{ toggle_home }}"
     cmd: "python3 setup.py install_data"
 
-- name: touch the local.cfg file
-  file:
-    path: /etc/toggle/local.cfg
-    state: touch
+- name: Register Octprint API key
+  script:
+    cmd: 'cat /home/debian/.octoprint/config.yaml | grep key: | cut -d ' ' -f 6-'
+  register: octoprint_api_key
+
+- name: Set up the local.cfg file
+  copy:
+    dest: /etc/toggle/local.cfg
     owner: debian
     group: debian
+    content: |
+      [OctoPrint]
+      user = toggle
+      authentication = {{ octoprint_api_key }}
+      apikey = {{ octoprint_api_key }}
+      timeout = 40
 
 - name: enable the toggle service
   shell: systemctl enable toggle
+
