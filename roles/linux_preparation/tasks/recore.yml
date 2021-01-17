@@ -57,7 +57,7 @@
 - name: set hostname
   copy:
     dest: /etc/hostname
-    content: '{{ platform }}\n'
+    content: "{{ platform }}\n"
 
 - name: set root password
   shell:
