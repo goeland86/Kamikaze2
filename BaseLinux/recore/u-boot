@@ -1,2 +1,1 @@
-UBOOT_BIN_URL="https://github.com/intelligent-agent/Recore/blob/master/binaries/u-boot-sunxi-with-spl-A4.bin?raw=true"
-UBOOT_BIN="u-boot-sunxi-with-spl.bin"
+UBOOT_BIN="roles/install_uboot/files/u-boot-sunxi-with-spl-a4.bin"

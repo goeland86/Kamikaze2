@@ -103,9 +103,6 @@ status=$?
 set -e
 
 if [ $TARGET_PLATFORM == "recore" ]; then
-	if [ ! -f $UBOOT_BIN ]; then
-	    wget $UBOOT_BIN_URL -O $UBOOT_BIN
-	fi
 	dd if=/dev/zero of=$DEVICE bs=1k count=1023 seek=1
 	dd if=$UBOOT_BIN of=$DEVICE bs=1024 seek=8 conv=notrunc
 fi
