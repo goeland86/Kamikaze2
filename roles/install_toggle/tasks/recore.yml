@@ -63,7 +63,7 @@
     cmd: "python3 setup.py install_data"
 
 - name: Register Octprint API key
-  command: cat /home/debian/.octoprint/config.yaml | grep key: | cut -d ' ' -f 6-
+  shell: cat /home/debian/.octoprint/config.yaml | grep 'key:' | cut -d ' ' -f 6-
   register: octoprint_api_key
 
 - name: Set up the local.cfg file
@@ -74,8 +74,8 @@
     content: |
       [OctoPrint]
       user = toggle
-      authentication = {{ octoprint_api_key }}
-      apikey = {{ octoprint_api_key }}
+      authentication = {{ octoprint_api_key.stdout }}
+      apikey = {{ octoprint_api_key.stdout }}
       timeout = 40
 
 - name: enable the toggle service
