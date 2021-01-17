@@ -23,7 +23,7 @@
     path: /etc/udev/rules.d/50-video.rules
     state: touch
 
-- name: Replicape: add video udev rules
+- name: add video udev rules
   lineinfile:
     path: /etc/udev/rules.d/50-video.rules
     line: 'KERNEL=="video0", TAG+="systemd"'
