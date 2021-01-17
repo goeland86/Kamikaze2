@@ -6,5 +6,5 @@ BASEIMAGE=armbian_pine64_current_$(date --iso-8601).img.xz
 ANSIBLE_PLATFORM_VARS='{"platform":"recore", "packaging":"apt"}'
 
 function decompress {
-	xz -c -d $BASEIMAGE >> $TARGETIMAGE
+	xz -T0 -vc -c -d $BASEIMAGE >> $TARGETIMAGE
 }
