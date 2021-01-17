@@ -64,7 +64,7 @@
 
 - name: Register Octprint API key
   script:
-    cmd: 'cat /home/debian/.octoprint/config.yaml | grep key: | cut -d ' ' -f 6-'
+    cmd: "cat /home/debian/.octoprint/config.yaml | grep key: | cut -d ' ' -f 6-"
   register: octoprint_api_key
 
 - name: Set up the local.cfg file
