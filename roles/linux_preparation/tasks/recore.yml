@@ -79,17 +79,12 @@
     url: "https://github.com/intelligent-agent/Recore/raw/master/Device_tree/{{ item }}"
     dest: "/boot/dtb/allwinner/{{ item }}"
   with_items:
-    - sun50i-a64-recore-A2.dtb
-    - sun50i-a64-recore-A2.dts
-    - sun50i-a64-recore-A3.dtb
-    - sun50i-a64-recore-A3.dts
-    - sun50i-a64-recore-A4.dtb
-    - sun50i-a64-recore-A4.dts
-
-- name: Recore - rename dtb device tree file
-  copy:
-    src: /boot/dtb/allwinner/sun50i-a64-recore-A4.dtb
-    dest: /boot/dtb/allwinner/sun50i-a64-recore.dtb
+    - sun50i-a64-recore-a2.dtb
+    - sun50i-a64-recore-a2.dts
+    - sun50i-a64-recore-a3.dtb
+    - sun50i-a64-recore-a3.dts
+    - sun50i-a64-recore-a4.dtb
+    - sun50i-a64-recore-a4.dts
 
 - name: Recore - Replace platform name
   replace:
