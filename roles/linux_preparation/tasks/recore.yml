@@ -113,3 +113,9 @@
 
 - name: Recore - Enable eth fix
   shell: systemctl enable recore-a4-eth-fix
+
+- name: Recore - Fix haveged
+  replace:
+    path: /etc/default/haveged
+    regexp: '"-w 1024"'
+    replace: '"-w 1024 -d 16"'
