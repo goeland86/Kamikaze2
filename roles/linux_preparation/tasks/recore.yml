@@ -99,3 +99,17 @@
   with_items:
     - { regexp1: 'Pine64', replace: 'Recore'}
     - { regexp1: 'pine64', replace: 'recore'}
+
+- name: Recore - Service - Ensure ethernet comes up
+  copy:
+    src: '{{ role_path }}/files/recore-a4-eth-fix.service'
+    dest: /etc/systemd/system/
+
+- name: Recore - Script - Ensure ethernet comes up
+  copy:
+    src: '{{ role_path }}/files/recore-a4-eth-fix'
+    dest: /usr/lib/
+    mode: +x
+
+- name: Recore - Enable eth fix
+  shell: systemctl enable recore-a4-eth-fix
