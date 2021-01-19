@@ -1,16 +1,4 @@
 ---
-- name: Replicape - Install Toggle
-  include: replicape.yml
-  when: platform == 'replicape'
-
 - name: Recore - Install Toggle
   include: recore.yml
   when: platform == 'recore'
-
-- name: Pi - Install Toggle
-  include: pi.yml
-  when: platform == 'pi'
-
-- name: Pi64
-  include: pi.yml
-  when: platform == 'pi64'
