@@ -31,8 +31,8 @@ The script then exports the `platform` ansible variable, and sources the `BaseLi
 
 **IMPORTANT NOTE**: Only the `SYSTEM-[...].yml` playbook files can work with the `build-image-in-chroot-end-to-end.sh` script. The `INSTALL-[...].yml` playbooks are provided as means for end-users to customize their running images. It is inadvisable to run a `SYSTEM-[...].yml` playbook on an already running system. And especially not during a print. That would cause a division by zero and make the printer disappear into its own micro black hole. Or release the magic smoke. Either way, not a good thing. You have been warned.
 
-### Example of running a task locally 
-`ansible-playbook -k INSTALL-toggle.yml --extra-vars '{"platform":"recore", "packaging":"apt"}'`
+### Example of running a task locally
+`ansible-playbook INSTALL-toggle.yml --extra-vars '{platform: recore}'`
 
 # Contributing
 
