@@ -49,7 +49,7 @@
     line: '%debian ALL=NOPASSWD: /bin/systemctl restart toggle.service'
     state: present
 
-- name: Use pip to install toggle in venv
+- name: Use pip to install toggle
   pip:
     chdir: '{{ toggle_home }}'
     requirements: '{{ toggle_home }}/requirements.txt'
@@ -73,18 +73,34 @@
       apikey =
 
 - name: enable the toggle service
-  shell: systemctl enable toggle
+  block:
+    - name: Attempt to enable toggle with systemd module
+      systemd:
+        name: toggle
+        daemon_reload: yes
+        enabled: yes
+  rescue:
+    - name: Fallback to shell
+      shell: systemctl enable toggle
 
 - name: Recore - copy toggle-runfirst service file
   copy:
     src: '{{ role_path }}/files/toggle-runfirst.service'
     dest: /etc/systemd/system/toggle-runfirst.service
 
-- name: Recore - Script - Ensure ethernet comes up
+- name: Recore - Script - install toggle-runfirst
   copy:
     src: '{{ role_path }}/files/toggle-runfirst'
     dest: /usr/lib/
     mode: +x
 
-- name: enable the toggle-runfirst service
-  shell: systemctl enable toggle-runfirst
+- name: Recore - enable the toggle-runfirst service
+  block:
+    - name: Attempt to enable toggle-runfirst service normally
+      systemd:
+        name: toggle-runfirst
+        daemon_reload: yes
+        enabled: yes
+  rescue:
+    - name: Fallback to shell
+      shell: systemctl enable toggle-runfirst
