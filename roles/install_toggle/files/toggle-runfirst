@@ -44,7 +44,7 @@ def update_toggle_config(password, apikey):
 def update_user_config(password):
     password_hash = hash_password(password)
     fname = '/home/debian/.octoprint/users.yaml'
-    with open(fname, 'r') as f_in:
+    with open(fname, 'r+') as f_in:
       users = yaml.safe_load(f_in)
       toggle = users.get('toggle', {})
       apikey = toggle.get('apikey', make_key(30))
