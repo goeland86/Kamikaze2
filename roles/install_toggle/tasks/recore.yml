@@ -75,3 +75,16 @@
 - name: enable the toggle service
   shell: systemctl enable toggle
 
+- name: Recore - copy toggle-runfirst service file
+  copy:
+    src: '{{ role_path }}/files/toggle-runfirst.service'
+    dest: /etc/systemd/system/toggle-runfirst.service
+
+- name: Recore - Script - Ensure ethernet comes up
+  copy:
+    src: '{{ role_path }}/files/toggle-runfirst'
+    dest: /usr/lib/
+    mode: +x
+
+- name: enable the toggle-runfirst service
+  shell: systemctl enable toggle-runfirst

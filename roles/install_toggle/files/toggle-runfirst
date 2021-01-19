@@ -1,0 +1,46 @@
+#!/usr/bin/python3
+
+import configparser
+import yaml
+import secrets
+import string
+
+alphabet = string.ascii_letters + string.digits
+password = ''.join(secrets.choice(alphabet) for i in range(20))
+
+api_key = ''.join(secrets.choice(alphabet) for i in range(30))
+
+local = configparser.ConfigParser()
+local["OctoPrint"] = {
+  'user': 'toggle',
+  'password': password,
+  'apikey': api_key
+}
+
+with open('/etc/toggle/local.cfg', 'w') as configfile:
+  local.write(configfile)
+
+
+with open('/home/debian/.octoprint/users.yaml') as f:
+  users = yaml.load(f)
+  users['toggle'] = {
+    'active': True,
+    'apikey': api_key,
+    'groups': ['users'],
+    'password': password,
+    'permissions': [],
+    'roles': ['user'],
+    'settings': {}
+}
+
+# toggle:
+#     active: true
+#     apikey: ${APIKEY}
+#     groups:
+#     - users
+#     password:
+#     permissions: []
+#     roles:
+#     - user
+#     settings: {}
+# EOL

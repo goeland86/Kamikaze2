@@ -1,0 +1,11 @@
+[Unit]
+Description=Allow Toggle to register access to OctoPrint
+After=octoprint.service
+
+[Service]
+Type=simple
+RemainAfterExit=yes
+ExecStart=/usr/lib/toggle-runfirst
+
+[Install]
+WantedBy=multi-user.target
