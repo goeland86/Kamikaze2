@@ -4,43 +4,66 @@ import configparser
 import yaml
 import secrets
 import string
+import hashlib
+import os
 
-alphabet = string.ascii_letters + string.digits
-password = ''.join(secrets.choice(alphabet) for i in range(20))
+def make_key(length):
+    alphabet = string.ascii_letters + string.digits
+    return ''.join(secrets.choice(alphabet) for i in range(length))
 
-api_key = ''.join(secrets.choice(alphabet) for i in range(30))
+def hash_password(password):
+    salt = get_salt()
+    return hashlib.sha512((password + salt).encode()).hexdigest()
 
-local = configparser.ConfigParser()
-local["OctoPrint"] = {
-  'user': 'toggle',
-  'password': password,
-  'apikey': api_key
-}
+def get_salt():
+    fname = '/home/debian/.octoprint/config.yaml'
+    with open(fname, "r") as f_in:
+        config = yaml.safe_load(f_in)
+        salt = config.get("accessControl", {}).get("salt", make_key(32))
+        config.setdefault("accessControl", {})["salt"] =  salt
+        with open(fname, "w") as f_out:
+            yaml.safe_dump(config, f_out, default_flow_style=False)
+        return salt
 
-with open('/etc/toggle/local.cfg', 'w') as configfile:
-  local.write(configfile)
+def get_password():
+    local = configparser.ConfigParser()
+    local.read('/etc/toggle/local.cfg')
+    return local.get("OctoPrint", 'password', fallback=make_key(10))
 
+def update_toggle_config(password, apikey):
+    local = configparser.ConfigParser()
+    local["OctoPrint"] = {
+      'user': 'toggle',
+      'password': password,
+      'apikey': apikey,
+      'authentication': apikey
+    }
+    with open('/etc/toggle/local.cfg', 'w') as configfile:
+      local.write(configfile)
 
-with open('/home/debian/.octoprint/users.yaml') as f:
-  users = yaml.load(f)
-  users['toggle'] = {
-    'active': True,
-    'apikey': api_key,
-    'groups': ['users'],
-    'password': password,
-    'permissions': [],
-    'roles': ['user'],
-    'settings': {}
-}
+def update_user_config(password):
+    password_hash = hash_password(password)
+    fname = '/home/debian/.octoprint/users.yaml'
+    with open(fname, 'r') as f_in:
+      users = yaml.safe_load(f_in)
+      toggle = users.get('toggle', {})
+      apikey = toggle.get('apikey', make_key(30))
+      toggle = {
+        'active': True,
+        'apikey': apikey,
+        'groups': ['users'],
+        'password': password_hash,
+        'permissions': [],
+        'roles': ['user'],
+        'settings': {}
+      }
+      users['toggle'] = toggle
+      with open(fname, 'w') as f_out:
+          yaml.safe_dump(users, f_out, default_flow_style=False)
+      return apikey
 
-# toggle:
-#     active: true
-#     apikey: ${APIKEY}
-#     groups:
-#     - users
-#     password:
-#     permissions: []
-#     roles:
-#     - user
-#     settings: {}
-# EOL
+passwd = get_password()
+apikey = update_user_config(passwd)
+update_toggle_config(passwd, apikey)
+
+os.system("systemctl disable toggle-runfirst")

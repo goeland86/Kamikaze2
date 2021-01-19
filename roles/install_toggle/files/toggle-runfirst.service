@@ -1,6 +1,6 @@
 [Unit]
 Description=Allow Toggle to register access to OctoPrint
-After=octoprint.service
+Before=octoprint.service toggle.service
 
 [Service]
 Type=simple
