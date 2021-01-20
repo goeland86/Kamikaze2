@@ -102,10 +102,6 @@ chroot ${MOUNTPOINT} su -c "cd ${REFACTOR_HOME} && ./prep_apt.sh && ansible-play
 status=$?
 set -e
 
-if [ $TARGET_PLATFORM == "recore" ]; then
-	dd if=/dev/zero of=$DEVICE bs=1k count=1023 seek=1
-	dd if=$UBOOT_BIN of=$DEVICE bs=1024 seek=8 conv=notrunc
-fi
 
 rm ${MOUNTPOINT}/etc/resolv.conf
 umount ${MOUNTPOINT}/proc
@@ -117,15 +113,27 @@ rmdir ${MOUNTPOINT}
 if [ $status -eq 0 ]; then
     echo "Looks like the image was prepared successfully - packing it up"
     if [ ${TARGET_PLATFORM} == 'replicape' ]; then
-      ./update-u-boot.sh $DEVICE
+			if [ ! -f ${UBOOT_SPL} ] ; then
+				wget ${UBOOT_SPL_URL}
+			fi
+			if [ ! -f ${UBOOT_BIN} ] ; then
+				wget ${UBOOT_BIN_URL}
+			fi
+			dd if=${UBOOT_SPL} of=${DEVICE} seek=1 bs=128k
+			dd if=${UBOOT_BIN} of=${DEVICE} seek=1 bs=384k
     fi
+
+		if [ ${TARGET_PLATFORM} == "recore" ]; then
+			dd if=/dev/zero of=${DEVICE} bs=1k count=1023 seek=1
+			dd if=${UBOOT_BIN} of=${DEVICE} bs=1024 seek=8 conv=notrunc
+		fi
     ./generate-image-from-sd.sh $DEVICE $TARGET_PLATFORM
+
+		losetup -d $DEVICE
 else
-    echo "image generation seems to have failed - cleaning up"
-fi
+    echo "image generation seems to have failed - cleaning up, returning $status"
 
-losetup -d $DEVICE
+		losetup -d $DEVICE
 
-if [ $status -ne 0 ]; then
-  exit $status
+		exit ${status}
 fi
