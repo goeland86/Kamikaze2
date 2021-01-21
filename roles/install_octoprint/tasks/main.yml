@@ -23,6 +23,7 @@
       - python3-pip
       - python3-dev
       - git
+      - python-setuptools
     state: present
 
 - name: verify python3-virtualenv is present
