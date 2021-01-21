@@ -100,7 +100,8 @@ EOF
 
 chroot ${MOUNTPOINT} su -c "\
 cd ${REFACTOR_HOME} && \
-apt install -y ansible python &&
+apt update && \
+apt install -y ansible python && \
 ansible-playbook ${SYSTEM_ANSIBLE} -T 180 --extra-vars '${ANSIBLE_PLATFORM_VARS}' -i hosts"
 
 status=$?
