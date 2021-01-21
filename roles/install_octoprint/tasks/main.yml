@@ -16,12 +16,13 @@
   shell: mv /etc/resolv.conf.bak /etc/resolv.conf
   when: platform != 'recore'
 
-- name: Install python3
+- name: Install packages
   apt:
     name:
       - iptables
       - python3-pip
       - python3-dev
+      - git
     state: present
 
 - name: verify python3-virtualenv is present

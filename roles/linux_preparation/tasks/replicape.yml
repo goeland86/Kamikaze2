@@ -27,18 +27,19 @@
     state: absent
     autoremove: yes
 
-- name: Replicape - update RCN scripts
-  command:
-    chdir: /opt/scripts
-    cmd: 'git pull'
-
 - name: install debconf-utils and curl
   apt:
     pkg:
       - debconf-utils
       - curl
       - firmware-realtek
+      - git
     state: present
+
+- name: Replicape - update RCN scripts
+  command:
+    chdir: /opt/scripts
+    cmd: 'git pull'
 
 - name: update package list
   apt:
