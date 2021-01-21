@@ -107,8 +107,8 @@ set -e
 rm ${MOUNTPOINT}/etc/resolv.conf
 umount ${MOUNTPOINT}/proc
 umount ${MOUNTPOINT}/sys
-umount ${MOUNTPOINT}/dev
 umount ${MOUNTPOINT}/dev/pts
+umount ${MOUNTPOINT}/dev
 umount ${MOUNTPOINT}
 rmdir ${MOUNTPOINT}
 
