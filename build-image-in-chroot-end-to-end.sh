@@ -71,7 +71,7 @@ mount ${DEVICE}p1 ${MOUNTPOINT}
 mount -o bind /dev ${MOUNTPOINT}/dev
 mount -o bind /sys ${MOUNTPOINT}/sys
 mount -o bind /proc ${MOUNTPOINT}/proc
-mount -o bind /pts ${MOUNTPOINT}/pts
+mount -o bind /dev/pts ${MOUNTPOINT}/dev/pts
 
 rm ${MOUNTPOINT}/etc/resolv.conf
 cp /etc/resolv.conf ${MOUNTPOINT}/etc/resolv.conf
@@ -108,7 +108,7 @@ rm ${MOUNTPOINT}/etc/resolv.conf
 umount ${MOUNTPOINT}/proc
 umount ${MOUNTPOINT}/sys
 umount ${MOUNTPOINT}/dev
-umount ${MOUNTPOINT}/pts
+umount ${MOUNTPOINT}/dev/pts
 umount ${MOUNTPOINT}
 rmdir ${MOUNTPOINT}
 
