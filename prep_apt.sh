@@ -6,7 +6,8 @@ echo "Installing ansible"
 chmod o+r /etc/resolv.conf
 echo "nameserver 1.1.1.1" > /etc/resolv.conf
 
-apt-get -y install ansible
+#apt-get -y install ansible
+pip3 install ansible
 
 sed -i 's/gather_timeout=10/gather_timeout=20/g' /etc/ansible/ansible.cfg
 
