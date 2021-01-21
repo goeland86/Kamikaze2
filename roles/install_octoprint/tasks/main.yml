@@ -15,13 +15,13 @@
 - name: reinstall resolv.conf
   shell: mv /etc/resolv.conf.bak /etc/resolv.conf
   when: platform != 'recore'
-  
-- name: Install python3.7
+
+- name: Install python3
   apt:
     name:
       - iptables
-      - python3.7
       - python3-pip
+      - python3-dev
     state: present
 
 - name: verify python3-virtualenv is present

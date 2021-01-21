@@ -1,33 +1,21 @@
 ---
-- name: update package list
-  apt:
-    update_cache: yes
-
-- name: upgrade packages
-  apt:
-    upgrade: dist
-
 - name: install packages
   apt:
     pkg:
     - unzip
     - iptables
     - iptables-persistent
-    - python-pip
-    - python3-pip
-    - python-dev
+    - python-setuptools
     - libavahi-compat-libdnssd1
     - libnss-mdns
     - byobu
     - htop
     - cpufrequtils
-    - pkg-config
-    - python3-dev
-    - pkg-config
-    - firmware-realtek
     state: present
     autoremove: yes
     autoclean: yes
+    upgrade: dist
+    update_cache: yes
 
 - name: enable ssh
   service:
