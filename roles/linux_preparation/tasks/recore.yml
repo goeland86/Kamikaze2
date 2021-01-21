@@ -1,4 +1,9 @@
 ---
+- name: upgrade packages
+  apt:
+    upgrade: dist
+    update_cache: yes
+
 - name: install packages
   apt:
     pkg:
@@ -14,8 +19,6 @@
     state: present
     autoremove: yes
     autoclean: yes
-    upgrade: dist
-    update_cache: yes
 
 - name: enable ssh
   service:
