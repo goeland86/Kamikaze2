@@ -93,12 +93,6 @@ if [ -f "customize.sh" ]; then
 fi
 
 set +e # allow this to fail - we'll check the return code
-cat << EOF | chroot ${MOUNTPOINT} su -c passwd
-1234
-kamikaze
-kamikaze
-EOF
-
 chroot ${MOUNTPOINT} su -c "\
 cd ${REFACTOR_HOME} && \
 apt update && \
