@@ -19,7 +19,8 @@
 - name: Install packages
   apt:
     name:
-      - iptables
+      - nftables
+      - python3.7
       - python3-pip
       - python3-dev
       - git
@@ -42,9 +43,10 @@
     home: /home/debian
 
 # iptables -t nat -A PREROUTING -p tcp --dport $srcPortNumber -j REDIRECT --to-port $dstPortNumber
-- name: create iptables port forward with iptables-legacy
-  shell:
-    cmd: iptables-legacy -t nat -A PREROUTING -p tcp --dport 80 -j REDIRECT --to-port 5000
+- name: create nftables port forward from :80 to :5000
+  copy:
+    src: "{{ role_path }}/files/nftables.conf"
+    dest: "/etc/nftables.conf"
 
 - name: create home octoprint folder
   file:
