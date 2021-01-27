@@ -88,7 +88,6 @@
     group: debian
     force: no
 
-
 - name: Use pip to install OctoPrint
   pip:
     chdir: '{{ octoprint_home }}'
@@ -97,24 +96,6 @@
     state: latest
     name: git+https://github.com/foosel/OctoPrint.git
   become_user: debian
-
-
-#- name: Use pip to install Octoprint-filemanager
-#  pip:
-#    chdir: '{{ octoprint_home }}'
-#    virtualenv: '{{ octoprint_home }}/venv'
-#    state: latest
-#    name: https://github.com/Salandora/OctoPrint-FileManager/archive/master.zip
-#  become_user: debian
-
-#- name: Use pip to install Octoprint-SystemCommandEditor
-#  pip:
-#    chdir: '{{ octoprint_home }}'
-#    virtualenv: '{{ octoprint_home }}/venv'
-#    state: latest
-#    name: https://github.com/Salandora/OctoPrint-SystemCommandEditor/archive/master.zip
-#  become_user: debian
-
 
 - name: Have the upload folder ready
   file:
@@ -153,7 +134,6 @@
     owner: root
     group: root
     mode: 0644
-
 
 - name: enable octoprint service
   service:
