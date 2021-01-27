@@ -42,11 +42,15 @@
     expires: -1
     home: /home/debian
 
-# iptables -t nat -A PREROUTING -p tcp --dport $srcPortNumber -j REDIRECT --to-port $dstPortNumber
 - name: create nftables port forward from :80 to :5000
   copy:
     src: "{{ role_path }}/files/nftables.conf"
     dest: "/etc/nftables.conf"
+
+- name: Enable nftables
+  service:
+    name: nftables
+    enabled: yes
 
 - name: create home octoprint folder
   file:
