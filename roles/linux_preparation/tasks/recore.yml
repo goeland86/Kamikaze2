@@ -8,9 +8,6 @@
   apt:
     pkg:
     - unzip
-    - iptables
-    - iptables-persistent
-    - python-setuptools
     - libavahi-compat-libdnssd1
     - libnss-mdns
     - byobu
