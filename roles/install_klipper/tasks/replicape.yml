@@ -15,6 +15,7 @@
     dest: '{{ klipper_home }}'
     update: yes
     clone: yes
+    depth: 1
 
 - name: Replicape - add debian user to tty group
   user:

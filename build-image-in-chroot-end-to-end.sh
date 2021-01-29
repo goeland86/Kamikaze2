@@ -34,7 +34,7 @@ fi
 
 TARGETIMAGE=refactor-${TARGET_PLATFORM}-rootfs.img
 MOUNTPOINT=$(mktemp -d /tmp/umikaze-root.XXXXXX)
-REFACTOR_HOME="/usr/src/ReFactor"
+REFACTOR_HOME="/usr/src/Refactor"
 
 if [ ! -f $BASEIMAGE ]; then
     wget $BASEIMAGE_URL -O $BASEIMAGE

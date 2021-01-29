@@ -3,7 +3,7 @@ accessControl:
 api:
   key: A16E678B4725409883770F6DD4DAA436
 appearance:
-  name: ReFactor
+  name: Refactor
 feature: {}
 folder:
   uploads: /home/debian/.octoprint/uploads

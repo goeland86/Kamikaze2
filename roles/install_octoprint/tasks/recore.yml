@@ -130,5 +130,5 @@
     state: directory
     recurse: yes
   with_items:
-    - /usr/src/ReFactor
+    - /usr/src/Refactor
     - /home/debian

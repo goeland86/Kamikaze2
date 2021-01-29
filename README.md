@@ -1,7 +1,7 @@
-# ReFactor
+# Refactor
 Simplified Recore and Replicape board image generation toolset, based on Armbian for Recore or Ubuntu images from RCN for beaglebone.
 
-The starting point for ReFactor is the Ubuntu console image, details are in the wiki here:
+The starting point for Refactor is the Ubuntu console image, details are in the wiki here:
 http://wiki.thing-printer.com/index.php?title=ReFactor
 
 ReFactor is a build-tool to install a printer's Firmware (at the moment Klipper), a printer control interface (OctoPrint), a touch-screen interface (Toggle w/ OctoPrint) and a few miscellaneous items (webcam streamer, network file share for gcode file uploads, etc.).
@@ -32,7 +32,7 @@ The script then exports the `platform` ansible variable, and sources the `BaseLi
 
 ## Example of running a task locally
 Creating a complete image can take a long time. During development it's better to run a single task.
-Here is an example of re-installing Toggle on a platform on a running Recore board. 
+Here is an example of re-installing Toggle on a platform on a running Recore board.
 `ansible-playbook INSTALL-toggle.yml --extra-vars '{platform: recore}'`
 
 # Contributing
