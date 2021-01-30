@@ -6,6 +6,7 @@ import secrets
 import string
 import hashlib
 import os
+import time
 
 def make_key(length):
     alphabet = string.ascii_letters + string.digits
