@@ -63,10 +63,12 @@ def update_user_config(password, fname):
 
 fname = '/home/debian/.octoprint/users.yaml'
 
-if os.path.exists(fname):
-  passwd = get_password()
-  apikey = update_user_config(passwd, fname)
-  update_toggle_config(passwd, apikey)
-  os.system("systemctl disable toggle-runfirst")
-  os.system("systemctl enable toggle")
-  os.system("systemctl restart toggle")
+while True:
+  if os.path.exists(fname):
+    passwd = get_password()
+    apikey = update_user_config(passwd, fname)
+    update_toggle_config(passwd, apikey)
+    os.system("systemctl disable toggle-runfirst")
+    exit(0)
+  else:
+    time.sleep(1)
