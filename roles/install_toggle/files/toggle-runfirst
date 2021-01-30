@@ -41,12 +41,8 @@ def update_toggle_config(password, apikey):
     with open('/etc/toggle/local.cfg', 'w') as configfile:
       local.write(configfile)
 
-def update_user_config(password):
+def update_user_config(password, fname):
     password_hash = hash_password(password)
-    fname = '/home/debian/.octoprint/users.yaml'
-    # Create file if it does not exist
-    with open(fname, 'w+'):
-      pass
     with open(fname, 'r') as f_in:
       users = yaml.safe_load(f_in) or {}
       toggle = users.get('toggle', {})
@@ -65,8 +61,12 @@ def update_user_config(password):
           yaml.safe_dump(users, f_out, default_flow_style=False)
       return apikey
 
-passwd = get_password()
-apikey = update_user_config(passwd)
-update_toggle_config(passwd, apikey)
+fname = '/home/debian/.octoprint/users.yaml'
 
-os.system("systemctl disable toggle-runfirst")
+if os.path.exists(fname):
+  passwd = get_password()
+  apikey = update_user_config(passwd, fname)
+  update_toggle_config(passwd, apikey)
+  os.system("systemctl disable toggle-runfirst")
+  os.system("systemctl enable toggle")
+  os.system("systemctl restart toggle")
