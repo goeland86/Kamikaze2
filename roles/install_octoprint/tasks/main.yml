@@ -1,7 +1,7 @@
 ---
-- name: copy the resolv.conf file
-  shell: cp /etc/resolv.conf /etc/resolv.conf.bak
-  when: platform != 'recore'
+- name: Recore - Install OctoPrint
+  include: recore.yml
+  when: platform == 'recore'
 
 - name: Replicape - Install OctoPrint
   include: replicape.yml
