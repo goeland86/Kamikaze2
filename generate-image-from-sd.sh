@@ -117,7 +117,7 @@ echo
 # Run one last defrag and zero of the free space before backing it up
 echo "Final defrag and zeroing partition free space."
 mount $PARTITION ${MOUNTPOINT}
-ImageVersion=$(cat ${MOUNTPOINT}/etc/refactor.version | awk -F' ' '{printf $1}')
+ImageVersion=$(cat ${MOUNTPOINT}/etc/refactor.version | sed 's/ /-/g' | awk -F' ' '{printf $1}')
 e4defrag -c ${MOUNTPOINT} > /dev/null
 # ignore the failure on this line - it runs until it's out of space
 dd if=/dev/zero of=${MOUNTPOINT}/zero_fill || true
