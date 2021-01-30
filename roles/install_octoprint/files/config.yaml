@@ -1,43 +1,25 @@
 appearance:
   name: KAMIKAZE
-feature: {}
 folder:
   uploads: /usr/share/models
-gcodeViewer: {}
 plugins:
   softwareupdate:
-    _config_version: 4
+    _config_version: 9
     checks:
-      Redeem:
-        checkout_folder: /usr/local/src/redeem
-        type: git_commit
-        update_script: '{python} "/usr/local/src/redeem/update-redeem.py" --python="{python}" --sudo "{folder}" "{target}"'
-        restart: 'echo "Redeem dummy restart"'
       octoprint:
         checkout_folder: /home/debian/OctoPrint
         prerelease: false
-        type: github_release
-      Kamikaze:
-        checkout_folder: /usr/src/Umikaze
-        type: git_commit
-        update_script: '/usr/src/Umikaze/update-kamikaze.sh'
-        restart: 'echo "Kamikaze dummy restart"'
-printerParameters: {}
 server:
   firstRun: true
   commands:
     serverRestartCommand: sudo systemctl restart octoprint.service
     systemRestartCommand: sudo reboot
     systemShutdownCommand: sudo shutdown -h now
-terminalFilters:
-  - name: Suppress temperature messages
-    regex: '(Send: (N\d+\s+)?M105)|(Recv:\s+(ok\s+)?.*\s(T\d*):\d+)'
-  - name: Suppress SD status messages
-    regex: '(Send: (N\d+\s+)?M27)|(Recv: SD printing byte)|(Recv: Not SD printing)'
-  - name: Suppress wait responses
-    regex: 'Recv: (wait)|(ok)$'
-temperature: {}
 webcam:
-  stream: http://arm.local:8080/?action=stream
-  snapshot: http://localhost:8080/?action=snapshot
+  stream: http://recore.local:8080/?action=stream
+  snapshot: http://recore.local:8080/?action=snapshot
   ffmpeg: /usr/bin/avconv
+serial:
+    additionalPorts:
+    - /tmp/printer
+    port: /tmp/printer
