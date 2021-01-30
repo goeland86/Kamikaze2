@@ -53,7 +53,6 @@
   pip:
     chdir: '{{ toggle_home }}'
     requirements: '{{ toggle_home }}/requirements.txt'
-    extra_args: "-e ."
     executable: pip3
 
 - name: Use pip to install toggle data files
@@ -71,6 +70,7 @@
       user = toggle
       authentication =
       apikey =
+      password =
 
 - name: enable the toggle service
   block:
