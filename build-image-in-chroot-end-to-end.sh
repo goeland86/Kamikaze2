@@ -42,9 +42,7 @@ fi
 
 rm -f $TARGETIMAGE
 decompress || $(echo "check your Linux platform file is correct!"; exit) # defined in the BaseLinux/{platform}/Linux file
-#if [ $TARGET_PLATFORM == 'replicape' ]; then
-truncate -s 4G $TARGETIMAGE
-#fi
+truncate -s 3500M $TARGETIMAGE
 
 DEVICE=`losetup -P -f --show $TARGETIMAGE`
 
