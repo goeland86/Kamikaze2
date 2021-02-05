@@ -66,8 +66,7 @@
     state: directory
   with_items:
     - '{{ octoprint_home }}/..'
-    - /usr/local/lib/python3
-    - /usr/local/lib/python3.6
+    - /usr/local/lib/python3.7
     - /usr/local/bin
 
 - name: Make octoprint config folder
@@ -101,12 +100,6 @@
     owner: debian
     group: debian
     mode: 0777
-
-- name: annotate OctoPrint port in services
-  lineinfile:
-    path: /etc/services
-    line: octoprint 5000/tcp
-    state: present
 
 - name: make sure the sudoers.d/debian file exists
   file:
