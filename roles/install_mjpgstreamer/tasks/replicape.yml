@@ -4,7 +4,6 @@
     pkg:
       - cmake
       - libjpeg-dev
-      - ffmpeg
     state: latest
 
 - name: clone git repo
