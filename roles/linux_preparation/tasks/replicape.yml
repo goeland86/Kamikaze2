@@ -49,19 +49,11 @@
   apt:
     pkg:
     - unzip
-    - iptables
-    - iptables-persistent
-    - python-pip
-    - python3-pip
-    - python-dev
     - libavahi-compat-libdnssd1
     - libnss-mdns
     - byobu
     - htop
-    - unzip
     - cpufrequtils
-    - pkg-config
-    - python3-dev
     - pkg-config
     state: present
     autoremove: yes
