@@ -42,7 +42,7 @@ fi
 
 rm -f $TARGETIMAGE
 decompress || $(echo "check your Linux platform file is correct!"; exit) # defined in the BaseLinux/{platform}/Linux file
-truncate -s 3500M $TARGETIMAGE
+truncate -s 3600M $TARGETIMAGE
 
 DEVICE=`losetup -P -f --show $TARGETIMAGE`
 
