@@ -67,17 +67,8 @@
     src: '{{ role_path }}/files/{{ item }}'
     dest: "/boot/dtb/allwinner/{{ item }}"
   with_items:
-    - sun50i-a64-recore-a2.dtb
-    - sun50i-a64-recore-a2.dts
     - sun50i-a64-recore-a3.dtb
-    - sun50i-a64-recore-a3.dts
     - sun50i-a64-recore-a4.dtb
-    - sun50i-a64-recore-a4.dts
-
-- name: Recore - rename dtb device tree file
-  copy:
-    src: /boot/dtb/allwinner/sun50i-a64-recore-a4.dtb
-    dest: /boot/dtb/allwinner/sun50i-a64-recore.dtb
 
 - name: Recore - Replace platform name
   replace:
@@ -87,20 +78,6 @@
   with_items:
     - { regexp1: 'Pine64', replace: 'Recore'}
     - { regexp1: 'pine64', replace: 'recore'}
-
-- name: Recore - Service - Ensure ethernet comes up
-  copy:
-    src: '{{ role_path }}/files/recore-a4-eth-fix.service'
-    dest: /etc/systemd/system/
-
-- name: Recore - Script - Ensure ethernet comes up
-  copy:
-    src: '{{ role_path }}/files/recore-a4-eth-fix'
-    dest: /usr/lib/
-    mode: +x
-
-- name: Recore - Enable eth fix
-  shell: systemctl enable recore-a4-eth-fix
 
 - name: Recore - Fix haveged
   replace:

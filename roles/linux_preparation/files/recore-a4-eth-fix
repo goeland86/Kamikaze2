@@ -1,5 +1,0 @@
-#!/usr/bin/bash
-
-gpioset 1 110=0
-sleep 3
-gpioset 1 110=1
