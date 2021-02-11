@@ -8,6 +8,11 @@
     cmd: 'FORCEMACHINE=TI_AM335x_BeagleBoneBlack /opt/scripts/tools/update_kernel.sh --lts-4_14 --ti-kernel'
   when: ('"4.14" not in kernel_version.stdout')
 
+- name: Replicape - Remove kernel 4.19
+  apt:
+    name: linux-image-4.19.94-ti-r5
+    state: absent
+
 - name: Replicape - clone klipper from the master repository
   git:
     repo: https://github.com/KevinOConnor/klipper
