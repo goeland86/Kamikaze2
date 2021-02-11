@@ -100,8 +100,8 @@ ansible-playbook ${SYSTEM_ANSIBLE} -T 180 --extra-vars '${ANSIBLE_PLATFORM_VARS}
 status=$?
 set -e
 
-lsof | grep pts
-
+rm -rf ${MOUNTPOINT}${REFACTOR_HOME}
+rm -rf ${MOUNTPOINT}/root/.ansible
 
 rm ${MOUNTPOINT}/etc/resolv.conf
 umount ${MOUNTPOINT}/proc
