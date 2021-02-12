@@ -7,7 +7,6 @@
     name:
       - nginx
       - apache2
-      - iptables
     state: absent
 
 - name: reinstall resolv.conf
