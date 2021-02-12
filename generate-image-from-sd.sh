@@ -137,7 +137,7 @@ blocksize=$(fdisk -l $DEVICE | grep Units: | awk '{printf $8}')
 count=$(fdisk -l -o Device,End $DEVICE | grep $PARTITION | awk '{printf $2}')
 ddcount=$((count*blocksize/1000000+1))
 dd if=$DEVICE bs=1MB count=${ddcount} | xz -vc -0 -T 0 > Refactor-${TARGET_PLATFORM}-"${ImageVersion}".img.xz
-ln -s Refactor-${TARGET_PLATFORM}-"${ImageVersion}".img.xz Refactor-${TARGET_PLATFORM}-current.img.xz
+ln -s -f Refactor-${TARGET_PLATFORM}-"${ImageVersion}".img.xz Refactor-${TARGET_PLATFORM}-current.img.xz
 
 # Talkie talkie
 echo "***************************************************************************************"
