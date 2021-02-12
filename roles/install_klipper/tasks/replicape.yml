@@ -10,7 +10,7 @@
 
 - name: Replicape - Remove kernel 4.19
   apt:
-    name: linux-image-4.19.94-ti-r5
+    name: linux-image-4.19.94-ti-r57
     state: absent
 
 - name: Replicape - clone klipper from the master repository
