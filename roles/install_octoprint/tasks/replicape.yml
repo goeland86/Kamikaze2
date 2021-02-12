@@ -1,17 +1,4 @@
 
-- name: copy the resolv.conf file
-  shell: cp /etc/resolv.conf /etc/resolv.conf.bak
-
-- name: remove nginx / apache / iptables
-  apt:
-    name:
-      - nginx
-      - apache2
-    state: absent
-
-- name: reinstall resolv.conf
-  shell: mv /etc/resolv.conf.bak /etc/resolv.conf
-
 - name: Install packages
   apt:
     name:
