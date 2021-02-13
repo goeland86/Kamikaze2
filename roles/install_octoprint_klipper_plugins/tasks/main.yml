@@ -5,6 +5,15 @@
     version: configSanityCheck
     dest: /usr/src/octoprint_klipper
 
+- name: Change ownership
+  file:
+    path: /usr/src/octoprint_klipper
+    owner: debian
+    group: debian
+    state: directory
+    recurse: yes
+
 - name: install octoprint klipper plugin in Octoprint virtual env
   shell:
     cmd: 'cd /usr/src/octoprint_klipper ; {{ octoprint_home }}/venv/bin/python setup.py clean install'
+  become_user: debian
