@@ -69,7 +69,6 @@
       [OctoPrint]
       user = toggle
       authentication =
-      apikey =
 
 - name: enable the toggle service
   block:

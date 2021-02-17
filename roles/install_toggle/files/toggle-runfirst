@@ -36,7 +36,6 @@ def update_toggle_config(password, apikey):
     local["OctoPrint"] = {
       'user': 'toggle',
       'password': password,
-      'apikey': apikey,
       'authentication': apikey
     }
     with open('/etc/toggle/local.cfg', 'w') as configfile:
