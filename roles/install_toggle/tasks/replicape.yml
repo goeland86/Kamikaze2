@@ -98,12 +98,6 @@
   shell:
     cmd: 'cd /usr/src/octoprint_toggle; {{ octoprint_home }}/venv/bin/python setup.py clean install'
 
-- name: install sudoers entry for toggle restart
-  lineinfile:
-    path: /etc/sudoers.d/octo
-    line: '%octo ALL=NOPASSWD: /usr/bin/make -C /usr/src/toggle install'
-    state: present
-
 - name: setup FB rotation in uEnv
   replace:
     regexp: "(cmdline=.*)"
