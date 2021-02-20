@@ -42,7 +42,6 @@
   git:
     repo: https://github.com/intelligent-agent/toggle
     dest: '{{ toggle_home }}/src/toggle'
-    version: dev
     depth: 1
 
 - name: copy toggle service file
@@ -56,64 +55,44 @@
     line: '%octo ALL=NOPASSWD: /bin/systemctl restart toggle.service'
     state: present
 
-- name: install pip3 dependencies
+- name: install pip3 to install Toggle
   pip:
-    virtualenv: '{{ toggle_home }}'
-    virtualenv_python: python3.6
-    requirements: '{{ toggle_home }}/src/toggle/requirements.txt'
+    chdir: '{{ toggle_home }}'
+    requirements: '{{ toggle_home }}/requirements.txt'
+    executable: pip3
 
-- name: install pip3 dependencies
-  pip:
-    virtualenv: '{{ toggle_home }}'
-    virtualenv_python: python3.6
-    name:
-     - gobject
-     - PyGObject
-
-- name: clone pyconnman
-  git:
-    repo: https://github.com/liamw9534/pyconnman
-    dest: '{{ toggle_home }}/src/pyconnman'
-    depth: 1
-
-- name: install pyconnman in venv
+- name: Install toggle data files
   shell:
-    cmd: 'cd {{ toggle_home }}/src/pyconnman ; ../../bin/python setup.py clean install'
+    chdir: "{{ toggle_home }}"
+    cmd: "python3 setup.py install_data"
 
-- name: install toggle in venv
-  shell:
-    cmd: 'cd {{ toggle_home }}/src/toggle ; {{ toggle_home }}/bin/pip install -e . -r requirements.txt ; {{ toggle_home }}/bin/python setup.py clean install'
-
-- name: make config directory
-  file:
-    path: /etc/toggle
-    state: directory
-    owner: octo
-    group: octo
-
-- name: copy toggle configs
+- name: Set up the local.cfg file
   copy:
-    src: '{{ toggle_home }}/src/toggle/configs/'
-    dest: /etc/toggle
-    owner: octo
-    group: octo
-
-- name: touch the local.cfg file
-  file:
-    path: /etc/toggle/local.cfg
-    state: touch
-    owner: octo
-    group: octo
+    dest: /etc/toggle/local.cfg
+    owner: debian
+    group: debian
+    content: |
+      [OctoPrint]
+      user = toggle
+      authentication =
+      apikey =
 
 - name: enable the toggle service
-  service:
-    name: toggle
-    enabled: yes
+  block:
+    - name: Attempt to enable toggle with systemd module
+      systemd:
+        name: toggle
+        daemon_reload: yes
+        enabled: yes
+  rescue:
+    - name: Fallback to shell
+      shell: systemctl enable toggle
 
 - name: clone octoprint toggle plugin from git
   git:
     repo: https://github.com/intelligent-agent/octoprint_toggle
     dest: /usr/src/octoprint_toggle
+    depth: 1
 
 - name: install octoprint toggle plugin in virtualenv
   shell:
@@ -130,8 +109,3 @@
     regexp: "(cmdline=.*)"
     replace: "\\1 fbcon=rotate:1"
     path: /boot/uEnv.txt
-
-- name: enable toggle service
-  service:
-    name: toggle
-    enabled: yes
