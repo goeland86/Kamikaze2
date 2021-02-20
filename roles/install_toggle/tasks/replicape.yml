@@ -1,35 +1,26 @@
 ---
-- name: install dependencies
+- name: install egl and libegles2
   apt:
     pkg:
-      - gir1.2-clutter-1.0=1.26.0+dfsg-10.1
-      - gir1.2-cogl-1.0=1.22.2-2.1
-      - gir1.2-coglpango-1.0=1.22.2-2.1
-      - gir1.2-mash-0.3-0=0.3.0-1
-      - gir1.2-mx-2.0=1.99.4-1.1
-      - libcairo2-dev
-      - libclutter-1.0-0=1.26.0+dfsg-10.1
-      - libclutter-1.0-common=1.26.0+dfsg-10.1 
-      - libclutter-imcontext-0.1-0=0.1.4-3.1
-      - libclutter-imcontext-0.1-bin=0.1.4-3.1
-      - libcluttergesture-0.0.2-0=0.0.2.1-7.2
-      - libcogl-common=1.22.2-2.1
-      - libcogl-pango20=1.22.2-2.1
-      - libcogl-path20=1.22.2-2.1
-      - libcogl20=1.22.2-2.1
-      - libmash-0.3-0=0.3.0-1
-      - libmx-2.0-0=1.99.4-1.1
-      - libmx-bin=1.99.4-1.1
-      - libmx-common=1.99.4-1.1
-      - python3-networkmanager
-      - python3-cairo
-      - python3-gi-cairo
-      - python3-tornado
-      - python3-pip
-      - python3-venv
-      - python3-dbus
-      - libdbus-1-dev
-      - libglib2.0-dev
+      - libegl1-sgx-omap3
+      - libgles2-sgx-omap3
+    state: present
+    force: yes
+
+- name: install egl and libegles2
+  apt:
+    pkg:
+      - ti-sgx-ti335x-modules-4.14.108-ti-r137
+      - gir1.2-mash-0.3-0
+      - gir1.2-mx-2.0
+      - libcogl20
+      - libclutter-1.0-0
+      - libclutter-imcontext-0.1-0
+      - libcluttergesture-0.0.2-0
+      - libclutter-1.0-common
+      - libclutter-imcontext-0.1-bin
+      - libcogl-common
+      - libmx-bin
     state: present
     force: yes
 
@@ -62,7 +53,7 @@
     virtualenv: '{{ toggle_home }}'
     virtualenv_python: python3.6
     name:
-     - gobject 
+     - gobject
      - PyGObject
 
 - name: clone pyconnman
