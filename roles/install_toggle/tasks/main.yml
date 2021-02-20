@@ -2,3 +2,7 @@
 - name: Recore - Install Toggle
   include: recore.yml
   when: platform == 'recore'
+
+- name: Rplicape - Install Toggle
+  include: replicape.yml
+  when: platform == 'replicape'
