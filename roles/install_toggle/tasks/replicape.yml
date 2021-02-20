@@ -51,8 +51,8 @@
 
 - name: grant sudo to octo user for restarting toggle service
   lineinfile:
-    path: /etc/sudoers.d/octo
-    line: '%octo ALL=NOPASSWD: /bin/systemctl restart toggle.service'
+    path: /etc/sudoers.d/debian
+    line: '%debian ALL=NOPASSWD: /bin/systemctl restart toggle.service'
     state: present
 
 - name: install pip3 to install Toggle
@@ -103,3 +103,25 @@
     regexp: "(cmdline=.*)"
     replace: "\\1 fbcon=rotate:1"
     path: /boot/uEnv.txt
+
+- name: Replicape - copy toggle-runfirst service file
+  copy:
+    src: '{{ role_path }}/files/toggle-runfirst.service'
+    dest: /etc/systemd/system/toggle-runfirst.service
+
+- name: Recore - Script - install toggle-runfirst
+  copy:
+    src: '{{ role_path }}/files/toggle-runfirst'
+    dest: /usr/lib/
+    mode: +x
+
+- name: Replicape - enable the toggle-runfirst service
+  block:
+    - name: Attempt to enable toggle-runfirst service normally
+      systemd:
+        name: toggle-runfirst
+        daemon_reload: yes
+        enabled: yes
+  rescue:
+    - name: Fallback to shell
+      shell: systemctl enable toggle-runfirst
