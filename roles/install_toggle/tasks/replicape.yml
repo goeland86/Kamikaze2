@@ -16,18 +16,19 @@
   apt:
     update_cache: yes
 
-- name: Install egl and libegles2
+- name: Install libegl libegles2, libGLES and pvr kernel modules
   apt:
     pkg:
       - libegl1-sgx-omap3
       - libgles2-sgx-omap3
+      - opengles-sgx-omap3
+      - ti-sgx-ti335x-modules-4.14.108-ti-r137
     state: present
     force: yes
 
-- name: Install clutter and friends
+- name: Install clutter and python bindings
   apt:
     pkg:
-      - ti-sgx-ti335x-modules-4.14.108-ti-r137
       - gir1.2-mash-0.3-0
       - gir1.2-mx-2.0
       - libcogl20
@@ -38,6 +39,7 @@
       - libclutter-imcontext-0.1-bin
       - libcogl-common
       - libmx-bin
+      - python3-gi-cairo
     state: present
     force: yes
 
@@ -78,7 +80,6 @@
       [OctoPrint]
       user = toggle
       authentication =
-      apikey =
 
 - name: enable the toggle service
   block:

@@ -1,20 +1,4 @@
 ---
-- name: install Beaglebone sgx drivers
-  command:
-    cmd: 'apt-get install -y {{ role_path }}/files/sgx-libgbm.deb {{ role_path }}/files/sgx-ti335x-userspace-1.14.3699939_1.1.deb'
-
-- name: copy powervr.ini file
-  copy:
-    src: '{{ role_path }}/files/powervr.ini'
-    dest: /etc/powervr.ini
-    mode: 755
-    owner: root
-
-- name: enable sgx-startup
-  service:
-    name: sgx-startup
-    enabled: yes
-
 - name: create console-setup
   file:
     path: /etc/default/console-setup
