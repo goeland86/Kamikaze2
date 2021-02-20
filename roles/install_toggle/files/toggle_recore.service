@@ -7,7 +7,6 @@ StartLimitBurst=3
 [Service]
 Environment="XDG_RUNTIME_DIR=/run/user/0"
 Environment=MX_RC_FILE=/etc/toggle/styles/Plain/style.css
-Environment=CLUTTER_BACKEND=wayland
 ExecStart=/usr/local/bin/toggle
 Restart=on-failure
 
