@@ -1,4 +1,18 @@
 ---
+- name: add thing-printer feeds
+  apt_key:
+    url: http://kamikaze.thing-printer.com/debian/public.gpg
+    state: present
+
+- name: Add specified repository into sources list
+  apt_repository:
+    repo: deb [arch=armhf] http://kamikaze.thing-printer.com/debian/ stretch main
+    state: present
+
+- name: update package list
+  apt:
+    update_cache: yes
+
 - name: install egl and libegles2
   apt:
     pkg:

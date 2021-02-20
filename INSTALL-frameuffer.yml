@@ -2,4 +2,4 @@
 - hosts: localhost
   connection: local
   roles:
-    - install_toggle
+    - install_framebuffer

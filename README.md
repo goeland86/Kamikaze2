@@ -33,7 +33,7 @@ The script then exports the `platform` ansible variable, and sources the `BaseLi
 ## Example of running a task locally
 Creating a complete image can take a long time. During development it's better to run a single task.
 Here is an example of re-installing Toggle on a platform on a running Recore board.
-`ansible-playbook INSTALL-toggle.yml --extra-vars '{platform: recore}'`
+`ansible-playbook INSTALL-toggle.yml --extra-vars '{platform: recore}' -i hosts`
 
 # Contributing
 Any contribution you make should be in the form of a PR in a separate branch and mull against master.
