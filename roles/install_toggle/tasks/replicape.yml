@@ -1,6 +1,6 @@
 ---
 - name: Clean apt to gain back space
-  command: apt-get clean
+  command: apt clean
 
 - name: Add thing-printer feeds
   apt_key:
@@ -15,16 +15,6 @@
 - name: Update package list
   apt:
     update_cache: yes
-
-- name: Install libegl libegles2, libGLES and pvr kernel modules
-  apt:
-    pkg:
-      - libegl1-sgx-omap3
-      - libgles2-sgx-omap3
-      - opengles-sgx-omap3
-      - ti-sgx-ti335x-modules-4.14.108-ti-r137
-    state: present
-    force: yes
 
 - name: Install clutter and python bindings
   apt:
