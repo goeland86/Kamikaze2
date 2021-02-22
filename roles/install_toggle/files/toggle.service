@@ -7,7 +7,7 @@ Requires=octoprint.service sgx-startup.service
 Type=simple
 ExecStartPre=/bin/systemctl stop getty@tty1.service
 ExecStartPre=/bin/bash -c '/bin/echo 0 > /sys/class/graphics/fbcon/cursor_blink'
-ExecStart=/usr/local/toggle/bin/toggle
+ExecStart=/usr/local/bin/toggle
 ExecStopPost=/bin/systemctl start getty@tty1.service
 ExecStopPost=/bin/bash -c '/bin/echo 1 > /sys/class/graphics/fbcon/cursor_blink'
 
