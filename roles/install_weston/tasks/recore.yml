@@ -40,7 +40,7 @@
 
       [Service]
       Environment="XDG_RUNTIME_DIR=/run/user/0"
-      ExecStart=/usr/bin/weston --tty 2
+      ExecStart=/usr/bin/weston-launch --user root
 
       [Install]
       WantedBy=multi-user.target
