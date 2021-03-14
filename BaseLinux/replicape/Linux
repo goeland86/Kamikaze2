@@ -1,6 +1,6 @@
 # This specifies the base Ubuntu system
-BASEIMAGE_DATE="2021-01-11"
-BASEIMAGE_UBUNTU_VERSION="10.7"
+BASEIMAGE_DATE="2021-02-22"
+BASEIMAGE_UBUNTU_VERSION="10.8"
 
 BASEIMAGE_URL=https://rcn-ee.com/rootfs/bb.org/testing/${BASEIMAGE_DATE}/buster-console/bone-debian-${BASEIMAGE_UBUNTU_VERSION}-console-armhf-${BASEIMAGE_DATE}-1gb.img.xz
 BASEIMAGE=`basename ${BASEIMAGE_URL}`
