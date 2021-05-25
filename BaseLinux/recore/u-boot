@@ -1,1 +1,1 @@
-UBOOT_BIN="roles/install_uboot/files/u-boot-sunxi-with-spl-a4.bin"
+UBOOT_BIN="roles/install_uboot/files/u-boot-sunxi-with-spl-a5.bin"

@@ -69,6 +69,7 @@
   with_items:
     - sun50i-a64-recore-a3.dtb
     - sun50i-a64-recore-a4.dtb
+    - sun50i-a64-recore-a5.dtb
 
 - name: Recore - Replace platform name
   replace:
