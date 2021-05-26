@@ -62,6 +62,14 @@
     - install-octopi.sh
     - install-ubuntu-18.04.sh
 
+- name: Replicape - Remove stm32 compiler and libs
+  lineinfile:
+    regex: "arm-none"
+    path: "{{ klipper_home }}/scripts/{{ item }}"
+    state: absent
+  with_items:
+    - install-debian.sh
+
 - name: Replicape - install Klipper with the install scripts
   shell: "export USER=debian; {{ klipper_home }}/scripts/install-beaglebone.sh"
   args:
